@@ -1,0 +1,473 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+@use '../../../styles/breakpoints' as *;
+
+.itemRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: $border-radius-md;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  min-height: 60px;
+
+  // Ensure touch events work properly
+  touch-action: manipulation;
+
+  &:hover {
+    border-color: $color-primary-light;
+    box-shadow: var(--shadow-sm);
+  }
+
+  &:focus-within {
+    border-color: $color-primary;
+    box-shadow: var(--shadow-focus);
+  }
+
+  @include mobile {
+    padding: var(--space-3);
+    gap: var(--space-2);
+    min-height: 56px;
+
+    // Better mobile touch feedback
+    &:active {
+      background-color: #f8fafc;
+    }
+  }
+}
+
+.itemCompleted {
+  opacity: 0.7;
+  background-color: #f8fafc;
+
+  .itemName {
+    text-decoration: line-through;
+    color: #64748b;
+  }
+
+  .itemQuantity {
+    color: #94a3b8;
+  }
+}
+
+.itemEditing {
+  border-color: $color-edit;
+  background-color: $color-edit-light;
+  cursor: default;
+
+  &:hover {
+    border-color: $color-edit;
+  }
+}
+
+.itemHighPriority {
+  border-left: 4px solid #ef4444;
+
+  .priorityBadge {
+    background-color: #fef2f2;
+    color: #dc2626;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    padding: 2px 6px;
+    border-radius: $border-radius-sm;
+  }
+}
+
+// Touch target mixin for mobile accessibility (minimum 44px as per Apple/Google guidelines)
+.itemToggle {
+  background: none;
+  border: none;
+  padding: var(--space-2);
+  cursor: pointer;
+  margin-top: 2px;
+  flex-shrink: 0;
+  border-radius: $border-radius-sm;
+
+  @include touch-target;
+
+  &:focus {
+    outline: none;
+
+    .checkbox {
+      box-shadow: var(--shadow-focus);
+    }
+  }
+
+  // Better touch response on mobile
+  @include mobile {
+    padding: var(--space-3);
+    margin: -2px;
+
+    &:active {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #d1d5db;
+  border-radius: $border-radius-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  background-color: #ffffff;
+
+  // Better mobile touch feedback
+  @include mobile {
+    width: 24px;
+    height: 24px;
+  }
+
+  svg {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+}
+
+.checkboxChecked {
+  background-color: $color-primary;
+  border-color: $color-primary;
+
+  svg {
+    opacity: 1;
+    color: white;
+  }
+}
+
+// Content styles
+.itemContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.itemMain {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+
+  @include tablet {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.itemName {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+  word-break: break-word;
+  line-height: 1.4;
+}
+
+.itemMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.itemQuantity {
+  font-size: var(--font-size-sm);
+  color: #6b7280;
+  font-weight: var(--font-weight-medium);
+}
+
+.itemNotes {
+  font-size: var(--font-size-sm);
+  color: #6b7280;
+  line-height: 1.4;
+  margin-top: var(--space-1);
+}
+
+// Category styles
+.itemCategory {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+// Actions styles
+.itemActions {
+  display: flex;
+  gap: var(--space-1);
+  flex-shrink: 0;
+  margin-top: 2px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+
+  // Ensure buttons get touch events
+  pointer-events: all;
+
+  .itemRow:hover &,
+  .itemRow:focus-within &,
+  .itemRow.itemEditing & {
+    opacity: 1;
+  }
+
+  @include mobile {
+    opacity: 1; // Always visible on mobile
+    gap: var(--space-2);
+
+    // Prevent touch-action interference
+    touch-action: manipulation;
+  }
+
+  @include tablet-and-up {
+    // Make actions more visible on larger screens
+    opacity: 0.7;
+
+    .itemRow:hover &,
+    .itemRow:focus-within &,
+    .itemRow.itemEditing & {
+      opacity: 1;
+    }
+  }
+}
+
+.actionButton {
+  background: none;
+  border: 1px solid transparent;
+  padding: var(--space-2);
+  border-radius: $border-radius-sm;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.2s ease;
+
+  @include touch-target;
+
+  &:hover {
+    background-color: #f3f4f6;
+    border-color: #d1d5db;
+    color: #374151;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+    border-color: $color-primary;
+  }
+
+  // Better mobile touch response
+  @include mobile {
+    padding: var(--space-3);
+    min-width: 48px;
+    min-height: 48px;
+
+    &:active {
+      background-color: #e5e7eb;
+      transform: scale(0.95);
+    }
+  }
+}
+
+.deleteButton {
+  color: $color-delete;
+
+  &:hover {
+    background-color: $color-delete-light;
+    border-color: $color-delete;
+  }
+}
+
+// Editing mode styles
+.editingFields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+
+  @include mobile {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.nameField {
+  font-weight: var(--font-weight-medium);
+}
+
+.quantityField,
+.unitField {
+  display: flex;
+  flex-direction: column;
+}
+
+.quantityInput,
+.unitInput {
+  font-size: var(--font-size-sm);
+}
+
+.categoryField,
+.priorityField {
+  font-size: var(--font-size-sm);
+}
+
+.notesField {
+  font-size: var(--font-size-sm);
+}
+
+// Edit actions
+.editActions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+
+  @include mobile {
+    flex-direction: column;
+  }
+}
+
+.saveButton,
+.cancelButton {
+  padding: var(--space-2) var(--space-4);
+  border-radius: $border-radius-sm;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid;
+
+  @include touch-target;
+
+  &:focus {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+  }
+
+  @include mobile {
+    padding: var(--space-3) var(--space-4);
+  }
+}
+
+.saveButton {
+  background-color: $color-primary;
+  border-color: $color-primary;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: $color-primary-dark;
+    border-color: $color-primary-dark;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.cancelButton {
+  background-color: transparent;
+  border-color: #d1d5db;
+  color: #6b7280;
+
+  &:hover {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+    color: #374151;
+  }
+}
+
+// Shortcuts hint
+.shortcutsHint {
+  font-size: var(--font-size-xs);
+  color: #9ca3af;
+  margin-top: var(--space-1);
+
+  span {
+    background-color: #f3f4f6;
+    padding: 2px 4px;
+    border-radius: $border-radius-sm;
+  }
+}
+
+// Responsive adjustments
+@include tablet {
+  .itemRow {
+    padding: var(--space-5);
+  }
+
+  .editingFields {
+    gap: var(--space-4);
+  }
+
+  .editActions {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}
+
+@include desktop {
+  .fieldRow {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .editActions {
+    margin-top: var(--space-3);
+
+    button {
+      min-width: 80px;
+    }
+  }
+}
+
+// Drag and drop styles
+.dragging {
+  opacity: 0.6;
+  transform: rotate(2deg);
+  box-shadow: var(--shadow-lg);
+  border-color: $color-primary;
+  background-color: $color-primary-light;
+  cursor: grabbing;
+  z-index: 1000;
+}
+
+.dragHandle {
+  cursor: grab;
+  color: #9ca3af;
+
+  &:hover {
+    color: #6b7280;
+    background-color: #f3f4f6;
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+// Mobile gesture styles
+.swiping {
+  transition: transform 0.1s ease;
+
+  &.swipeRight {
+    transform: translateX(10px);
+    background-color: #dcfce7;
+    border-color: #16a34a;
+  }
+
+  &.swipeLeft {
+    transform: translateX(-10px);
+    background-color: #fef2f2;
+    border-color: #dc2626;
+  }
+}

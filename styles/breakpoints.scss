@@ -1,0 +1,105 @@
+@use 'sass:map';
+
+// Breakpoints for Mobile-First Responsive Design
+// These breakpoints follow the mobile-first approach specified in the plan
+
+$breakpoints: (
+  sm: 640px,
+  // Small tablets
+  md: 801px,
+  // Tablets - changed from 768px to 801px for navbar visibility
+  lg: 1024px,
+  // Small desktops
+  xl: 1280px, // Large desktops
+);
+
+// Responsive mixin for mobile-first design
+@mixin respond-to($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media (min-width: map.get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$breakpoint}. Available breakpoints are: #{map.keys($breakpoints)}";
+  }
+}
+
+// Specific breakpoint mixins for convenience
+@mixin mobile-only {
+  @media (max-width: #{map.get($breakpoints, sm) - 1px}) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @include mobile-only {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @include respond-to(sm) {
+    @content;
+  }
+}
+
+@mixin tablet-and-up {
+  @include respond-to(md) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @include respond-to(lg) {
+    @content;
+  }
+}
+
+@mixin desktop-and-up {
+  @include respond-to(lg) {
+    @content;
+  }
+}
+
+// Example usage:
+// .component {
+//   // Mobile styles (default)
+//   padding: var(--space-4);
+//
+//   @include respond-to(md) {
+//     // Tablet styles
+//     padding: var(--space-6);
+//   }
+//
+//   @include respond-to(lg) {
+//     // Desktop styles
+//     padding: var(--space-8);
+//   }
+// }
+
+// Container mixin for responsive layouts
+@mixin container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+
+  @include respond-to(sm) {
+    max-width: var(--container-sm);
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+
+  @include respond-to(md) {
+    max-width: var(--container-md);
+  }
+
+  @include respond-to(lg) {
+    max-width: var(--container-lg);
+  }
+
+  @include respond-to(xl) {
+    max-width: var(--container-xl);
+  }
+}

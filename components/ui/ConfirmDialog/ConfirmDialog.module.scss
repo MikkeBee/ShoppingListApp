@@ -1,0 +1,83 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+@use '../../../styles/breakpoints' as *;
+
+.confirmDialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-6);
+
+  @include mobile {
+    padding: var(--space-4);
+    gap: var(--space-4);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: 0;
+
+  @include mobile {
+    font-size: var(--font-size-base);
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.message {
+  font-size: var(--font-size-base);
+  color: #6b7280;
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+
+  @include mobile {
+    font-size: var(--font-size-sm);
+  }
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+
+  @include mobile {
+    flex-direction: column-reverse;
+    gap: var(--space-2);
+  }
+}
+
+.cancelButton,
+.confirmButton {
+  min-width: 80px;
+
+  @include mobile {
+    width: 100%;
+  }
+}
+
+.confirmButton {
+  &[data-variant='delete'] {
+    background-color: $color-delete;
+    border-color: $color-delete;
+
+    &:hover {
+      background-color: $color-delete-hover;
+      border-color: $color-delete-hover;
+    }
+  }
+}

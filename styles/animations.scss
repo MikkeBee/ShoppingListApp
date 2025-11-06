@@ -1,0 +1,334 @@
+// Animation Variables and Mixins
+// Central animation system for consistent motion design
+
+// Animation Durations
+:root {
+  --animation-duration-fast: 150ms;
+  --animation-duration-normal: 250ms;
+  --animation-duration-slow: 400ms;
+  --animation-duration-slower: 600ms;
+
+  // Easing Functions
+  --animation-easing-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --animation-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --animation-easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --animation-easing-ease-in: ease-in;
+  --animation-easing-ease-out: ease-out;
+  --animation-easing-ease-in-out: ease-in-out;
+
+  // Transform Origins
+  --transform-origin-center: center;
+  --transform-origin-top: top;
+  --transform-origin-bottom: bottom;
+  --transform-origin-left: left;
+  --transform-origin-right: right;
+}
+
+// Respect reduced motion preferences
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --animation-duration-fast: 0ms;
+    --animation-duration-normal: 0ms;
+    --animation-duration-slow: 0ms;
+    --animation-duration-slower: 0ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// Animation Mixins
+
+// Fade animations
+@mixin fade-in(
+  $duration: var(--animation-duration-normal),
+  $easing: var(--animation-easing-smooth)
+) {
+  animation: fade-in $duration $easing both;
+}
+
+@mixin fade-out(
+  $duration: var(--animation-duration-fast),
+  $easing: var(--animation-easing-smooth)
+) {
+  animation: fade-out $duration $easing both;
+}
+
+// Slide animations
+@mixin slide-in-up(
+  $duration: var(--animation-duration-normal),
+  $easing: var(--animation-easing-spring)
+) {
+  animation: slide-in-up $duration $easing both;
+}
+
+@mixin slide-in-down(
+  $duration: var(--animation-duration-normal),
+  $easing: var(--animation-easing-spring)
+) {
+  animation: slide-in-down $duration $easing both;
+}
+
+@mixin slide-out-up(
+  $duration: var(--animation-duration-fast),
+  $easing: var(--animation-easing-smooth)
+) {
+  animation: slide-out-up $duration $easing both;
+}
+
+@mixin slide-out-down(
+  $duration: var(--animation-duration-fast),
+  $easing: var(--animation-easing-smooth)
+) {
+  animation: slide-out-down $duration $easing both;
+}
+
+// Scale animations
+@mixin scale-in(
+  $duration: var(--animation-duration-normal),
+  $easing: var(--animation-easing-bounce)
+) {
+  animation: scale-in $duration $easing both;
+}
+
+@mixin scale-out(
+  $duration: var(--animation-duration-fast),
+  $easing: var(--animation-easing-smooth)
+) {
+  animation: scale-out $duration $easing both;
+}
+
+// Bounce animation
+@mixin bounce(
+  $duration: var(--animation-duration-fast),
+  $easing: var(--animation-easing-bounce)
+) {
+  animation: bounce $duration $easing both;
+}
+
+// Stagger animation utility
+@mixin stagger-animation($delay-step: 50ms, $max-items: 10) {
+  @for $i from 1 through $max-items {
+    &:nth-child(#{$i}) {
+      animation-delay: #{($i - 1) * $delay-step};
+    }
+  }
+}
+
+// Loading pulse animation
+@mixin loading-pulse($duration: var(--animation-duration-slower)) {
+  animation: loading-pulse $duration ease-in-out infinite alternate;
+}
+
+// Hover lift effect
+@mixin hover-lift($scale: 1.02, $duration: var(--animation-duration-fast)) {
+  transition: transform $duration var(--animation-easing-smooth);
+
+  &:hover {
+    transform: translateY(-2px) scale($scale);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.98);
+  }
+}
+
+// Focus ring animation
+@mixin focus-ring(
+  $color: var(--color-border-focus),
+  $duration: var(--animation-duration-fast)
+) {
+  outline: none;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 2px solid transparent;
+    border-radius: inherit;
+    transition: border-color $duration var(--animation-easing-smooth);
+    pointer-events: none;
+  }
+
+  &:focus-visible::after {
+    border-color: $color;
+  }
+}
+
+// Keyframe Animations
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-out-up {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes slide-out-down {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scale-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes loading-pulse {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-2px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(2px);
+  }
+}
+
+@keyframes success-checkmark {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+// Page Transition Classes
+
+.page-enter {
+  @include fade-in();
+}
+
+.page-exit {
+  @include fade-out();
+}
+
+.item-enter {
+  @include slide-in-up();
+}
+
+.item-exit {
+  @include slide-out-down();
+}
+
+.modal-enter {
+  @include scale-in();
+}
+
+.modal-exit {
+  @include scale-out();
+}
+
+.notification-enter {
+  @include slide-in-down();
+}
+
+.notification-exit {
+  @include slide-out-up();
+}

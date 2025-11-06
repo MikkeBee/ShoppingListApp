@@ -1,0 +1,223 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins';
+@use '../../../styles/breakpoints' as *;
+
+.selectWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  &.fullWidth {
+    width: 100%;
+  }
+
+  &.hasError {
+    .selectButton {
+      border-color: var(--color-error);
+    }
+  }
+
+  &.isDisabled {
+    .selectButton {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+
+  &.required::after {
+    content: ' *';
+    color: var(--color-error);
+  }
+}
+
+.selectContainer {
+  position: relative;
+  width: 100%;
+}
+
+.selectButton {
+  // Input base styles (inlined)
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
+  transition: border-color 0.2s ease-in-out;
+  min-height: 44px;
+  min-width: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+
+  // Better mobile touch target
+  @include mobile {
+    font-size: 16px; // Prevents zoom on iOS
+    min-height: 48px;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-border-hover);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-border-focus);
+    box-shadow: var(--shadow-focus);
+  }
+
+  &.error {
+    border-color: var(--color-error);
+
+    &:focus {
+      border-color: var(--color-error);
+      box-shadow: 0 0 0 3px rgb(239 68 68 / 0.1);
+    }
+  }
+
+  &.open {
+    border-color: var(--color-border-focus);
+    box-shadow: var(--shadow-focus);
+  }
+
+  &:disabled {
+    background-color: var(--color-disabled-light);
+    color: var(--color-disabled);
+    cursor: not-allowed;
+    border-color: var(--color-border-light);
+  }
+}
+
+.selectValue {
+  flex: 1;
+  text-align: left;
+  color: var(--color-text-primary);
+
+  &.placeholder {
+    color: var(--color-text-muted);
+  }
+}
+
+.selectIcon {
+  color: var(--color-text-muted);
+  transition: transform 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.iconOpen {
+    transform: rotate(180deg);
+  }
+
+  svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: $border-radius-lg;
+  box-shadow: var(--shadow-lg);
+  margin-top: 2px;
+  overflow: hidden;
+  animation: dropdownSlideIn 0.15s ease-out;
+
+  // Ensure dropdown appears above other elements
+  max-height: 300px;
+  overflow-y: auto;
+
+  // Custom scrollbar for webkit browsers
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $color-gray-100;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $color-gray-300;
+    border-radius: $border-radius-full;
+
+    &:hover {
+      background: $color-gray-400;
+    }
+  }
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--color-text-primary);
+  transition: background-color 0.2s ease;
+
+  @include mobile {
+    font-size: 16px;
+    padding: var(--space-4);
+    min-height: 48px; // Better touch target on mobile
+  }
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-surface-hover);
+  }
+
+  &:focus {
+    outline: none;
+    background-color: var(--color-surface-hover);
+  }
+
+  &.optionSelected {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+    font-weight: var(--font-weight-medium);
+  }
+
+  &.optionDisabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    color: var(--color-disabled);
+  }
+}
+
+@keyframes dropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.errorMessage {
+  font-size: var(--font-size-sm);
+  color: var(--color-error);
+  line-height: var(--line-height-tight);
+  margin-top: var(--space-1);
+}

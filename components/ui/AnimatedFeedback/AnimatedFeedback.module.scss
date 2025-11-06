@@ -1,0 +1,244 @@
+// Animated Feedback Styles
+@use '../../../styles/animation-variables' as anim;
+@use '../../../styles/animation-mixins' as mixins;
+
+.feedback {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  max-width: 90vw;
+  width: auto;
+  min-width: 300px;
+  opacity: 0;
+  transition: all anim.$animation-duration-normal anim.$animation-easing-spring;
+  pointer-events: none;
+
+  // Position variants
+  &.top {
+    top: 1rem;
+    transform: translateX(-50%) translateY(-100%);
+  }
+
+  &.bottom {
+    bottom: 1rem;
+    transform: translateX(-50%) translateY(100%);
+  }
+
+  &.center {
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+
+    &.top {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    &.bottom {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    &.center {
+      transform: translateX(-50%) translateY(-50%);
+    }
+  }
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(8px);
+  border: 1px solid transparent;
+
+  // Feedback type styling
+  .feedback.success & {
+    background: rgba(34, 197, 94, 0.9);
+    color: white;
+    border-color: rgba(34, 197, 94, 0.3);
+  }
+
+  .feedback.error & {
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+    border-color: rgba(239, 68, 68, 0.3);
+  }
+
+  .feedback.warning & {
+    background: rgba(245, 158, 11, 0.9);
+    color: white;
+    border-color: rgba(245, 158, 11, 0.3);
+  }
+
+  .feedback.info & {
+    background: rgba(59, 130, 246, 0.9);
+    color: white;
+    border-color: rgba(59, 130, 246, 0.3);
+  }
+}
+
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+
+  // Success checkmark animation
+  .feedback.success & .checkPath {
+    animation: success-checkmark anim.$animation-duration-slow
+      anim.$animation-easing-smooth forwards;
+  }
+
+  // Error shake animation
+  .feedback.error & {
+    animation: shake anim.$animation-duration-normal
+      anim.$animation-easing-smooth;
+  }
+
+  // Warning pulse
+  .feedback.warning & {
+    animation: warning-pulse anim.$animation-duration-slower ease-in-out
+      infinite alternate;
+  }
+}
+
+.message {
+  flex: 1;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+}
+
+.dismissButton {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: var(--radius-sm);
+  transition: all anim.$animation-duration-fast anim.$animation-easing-smooth;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:focus-visible {
+    @include mixins.focus-ring(rgba(255, 255, 255, 0.5));
+  }
+}
+
+// Additional animations
+@keyframes warning-pulse {
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Mobile responsiveness
+@media (max-width: 768px) {
+  .feedback {
+    min-width: 280px;
+    max-width: 95vw;
+
+    &.top {
+      top: env(safe-area-inset-top, 1rem);
+    }
+
+    &.bottom {
+      bottom: env(safe-area-inset-bottom, 1rem);
+    }
+  }
+
+  .content {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .message {
+    font-size: var(--font-size-xs);
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .content {
+    border-width: 2px;
+
+    .feedback.success & {
+      background: #22c55e;
+      border-color: #16a34a;
+    }
+
+    .feedback.error & {
+      background: #ef4444;
+      border-color: #dc2626;
+    }
+
+    .feedback.warning & {
+      background: #f59e0b;
+      border-color: #d97706;
+    }
+
+    .feedback.info & {
+      background: #3b82f6;
+      border-color: #2563eb;
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .feedback {
+    transition: opacity anim.$animation-duration-fast ease;
+
+    &.top,
+    &.bottom,
+    &.center {
+      transform: translateX(-50%);
+    }
+
+    &.visible {
+      &.top,
+      &.bottom,
+      &.center {
+        transform: translateX(-50%);
+      }
+    }
+  }
+
+  .icon {
+    .feedback.success & .checkPath {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+
+    .feedback.error & {
+      animation: none;
+    }
+
+    .feedback.warning & {
+      animation: none;
+    }
+  }
+}

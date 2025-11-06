@@ -1,0 +1,23 @@
+// Animation Variables
+// SCSS variables for animation system
+
+// Animation Durations
+$animation-duration-fast: 150ms;
+$animation-duration-normal: 250ms;
+$animation-duration-slow: 400ms;
+$animation-duration-slower: 600ms;
+
+// Easing Functions
+$animation-easing-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+$animation-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+$animation-easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+$animation-easing-ease-in: ease-in;
+$animation-easing-ease-out: ease-out;
+$animation-easing-ease-in-out: ease-in-out;
+
+// Transform Origins
+$transform-origin-center: center;
+$transform-origin-top: top;
+$transform-origin-bottom: bottom;
+$transform-origin-left: left;
+$transform-origin-right: right;

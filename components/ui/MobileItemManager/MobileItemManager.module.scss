@@ -1,0 +1,101 @@
+@use '../../../styles/breakpoints' as *;
+
+// MobileItemManager Styles
+.fab {
+  // Show FAB on all screens 801px and up (when navbar is hidden)
+  @include tablet-and-up {
+    display: flex !important; /* Use flex instead of block to maintain proper layout */
+    z-index: 1000;
+  }
+
+  // Hide FAB on screens 800px and below (when navbar is visible)
+  @media (max-width: 800px) {
+    display: none !important;
+  }
+}
+
+.bottomSheet {
+  // Custom styling for the add item bottom sheet
+  .header {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.formContainer {
+  padding: 0 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+
+  .mobileForm {
+    flex: 1;
+
+    // Optimize form layout for mobile
+    .formSection {
+      margin-bottom: 1rem;
+    }
+
+    // Make input fields more mobile-friendly
+    input,
+    select,
+    textarea {
+      min-height: 44px; // Touch target size
+      font-size: 16px; // Prevent zoom on iOS
+      padding: 0.75rem;
+    }
+
+    // Adjust button spacing for mobile
+    .submitButton {
+      margin-top: 1rem;
+      padding: 1rem;
+      font-size: 1rem;
+      min-height: 48px;
+    }
+
+    // Stack form elements vertically on small screens
+    .formRow {
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .formField {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.formHint {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  padding: 0.5rem;
+  margin-top: auto;
+
+  p {
+    margin: 0;
+    opacity: 0.7;
+  }
+}
+
+// FAB is now shown on all screen sizes
+
+// Ensure mobile experience is optimal
+@media (max-width: 768px) {
+  .formContainer {
+    // Adjust for mobile keyboard
+    .mobileForm {
+      // Prevent layout shift when keyboard appears
+      .successMessage {
+        position: fixed;
+        top: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1001;
+        max-width: 90%;
+      }
+    }
+  }
+}

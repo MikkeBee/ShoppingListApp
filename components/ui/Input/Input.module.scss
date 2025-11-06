@@ -1,0 +1,165 @@
+@use '../../../styles/variables';
+@use '../../../styles/mixins';
+@use '../../../styles/breakpoints' as *;
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+
+  &.required::after {
+    content: ' *';
+    color: var(--color-error);
+  }
+}
+
+.input {
+  @include mixins.input-base;
+
+  // Ensure adequate touch targets on mobile
+  @include mixins.touch-target;
+
+  &::placeholder {
+    color: var(--color-text-muted);
+    opacity: 1; // Firefox fix
+  }
+
+  // Focus state
+  &:focus {
+    outline: none;
+    border-color: var(--color-border-focus);
+    box-shadow: var(--shadow-focus);
+  }
+
+  // Error state
+  &.error {
+    border-color: var(--color-error);
+
+    &:focus {
+      border-color: var(--color-error);
+      box-shadow: 0 0 0 3px rgb(239 68 68 / 0.1);
+    }
+  }
+
+  // Disabled state
+  &:disabled {
+    background-color: var(--color-disabled-light);
+    color: var(--color-disabled);
+    cursor: not-allowed;
+    border-color: var(--color-border-light);
+
+    &::placeholder {
+      color: var(--color-disabled);
+    }
+  }
+
+  // Full width
+  &.full-width {
+    width: 100%;
+  }
+
+  // Number input specific styles
+  &[type='number'] {
+    -moz-appearance: textfield; // Firefox: hide spinner
+    appearance: textfield; // Standard property
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none; // Chrome/Safari: hide spinner
+      appearance: none; // Standard property
+      margin: 0;
+    }
+  }
+
+  // Search input specific styles
+  &[type='search'] {
+    -webkit-appearance: none; // Remove Safari styling
+    appearance: none; // Standard property
+
+    &::-webkit-search-decoration,
+    &::-webkit-search-cancel-button,
+    &::-webkit-search-results-button,
+    &::-webkit-search-results-decoration {
+      -webkit-appearance: none;
+    }
+  }
+}
+
+.error-message {
+  font-size: var(--font-size-sm);
+  color: var(--color-error);
+  line-height: var(--line-height-tight);
+  margin-top: var(--space-1);
+}
+
+// Wrapper states
+.full-width {
+  width: 100%;
+}
+
+.has-error {
+  .label {
+    color: var(--color-error);
+  }
+}
+
+.is-disabled {
+  opacity: 0.6;
+
+  .label {
+    color: var(--color-disabled);
+  }
+}
+
+// Mobile-specific enhancements
+@include mobile-only {
+  .input {
+    // Larger text on mobile to prevent zoom
+    font-size: 16px;
+
+    // Additional padding for easier touch interaction
+    padding: var(--space-4);
+  }
+
+  .label {
+    // Slightly larger labels on mobile
+    font-size: var(--font-size-base);
+  }
+}
+
+// Reduce motion for users who prefer it
+@media (prefers-reduced-motion: reduce) {
+  .input {
+    transition: none;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .input {
+    border-width: 2px;
+
+    &:focus {
+      border-width: 3px;
+    }
+
+    &.error {
+      border-width: 2px;
+
+      &:focus {
+        border-width: 3px;
+      }
+    }
+  }
+
+  .error-message {
+    font-weight: var(--font-weight-semibold);
+  }
+}

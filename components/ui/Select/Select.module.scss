@@ -1,0 +1,233 @@
+@use '../../../styles/variables';
+@use '../../../styles/mixins';
+@use '../../../styles/breakpoints' as *;
+
+.select-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+
+  &.required::after {
+    content: ' *';
+    color: var(--color-error);
+  }
+}
+
+.select-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.select {
+  @include mixins.input-base;
+  @include mixins.touch-target;
+
+  // Remove default select styling
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  // Add space for custom arrow
+  padding-right: var(--space-10);
+
+  // Cursor indicates interactivity
+  cursor: pointer;
+
+  // Better font size for mobile
+  @include mobile {
+    font-size: 16px; // Prevents zoom on iOS
+  }
+
+  // Focus state
+  &:focus {
+    outline: none;
+    border-color: var(--color-border-focus);
+    box-shadow: var(--shadow-focus);
+  }
+
+  // Style the options for better readability
+  option {
+    font-size: 14px;
+    padding: var(--space-2) var(--space-3);
+    color: var(--color-text-primary);
+    background-color: var(--color-surface);
+
+    @include mobile {
+      font-size: 16px;
+      padding: var(--space-3) var(--space-4);
+      min-height: 44px;
+    }
+
+    &:checked {
+      background-color: var(--color-primary-light);
+      color: var(--color-primary);
+    }
+
+    &:hover {
+      background-color: var(--color-surface-hover);
+    }
+  }
+
+  // Error state
+  &.error {
+    border-color: var(--color-error);
+
+    &:focus {
+      border-color: var(--color-error);
+      box-shadow: 0 0 0 3px rgb(239 68 68 / 0.1);
+    }
+  }
+
+  // Disabled state
+  &:disabled {
+    background-color: var(--color-disabled-light);
+    color: var(--color-disabled);
+    cursor: not-allowed;
+    border-color: var(--color-border-light);
+  }
+
+  // Full width
+  &.full-width {
+    width: 100%;
+  }
+
+  // Hide default arrow in IE
+  &::-ms-expand {
+    display: none;
+  }
+}
+
+.select-icon {
+  position: absolute;
+  top: 50%;
+  right: var(--space-3);
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--color-text-muted);
+  transition: color 0.2s ease-in-out;
+
+  svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.error-message {
+  font-size: var(--font-size-sm);
+  color: var(--color-error);
+  line-height: var(--line-height-tight);
+  margin-top: var(--space-1);
+}
+
+// Wrapper states
+.full-width {
+  width: 100%;
+}
+
+.has-error {
+  .label {
+    color: var(--color-error);
+  }
+
+  .select-icon {
+    color: var(--color-error);
+  }
+}
+
+.is-disabled {
+  opacity: 0.6;
+
+  .label {
+    color: var(--color-disabled);
+  }
+
+  .select-icon {
+    color: var(--color-disabled);
+  }
+}
+
+// Hover and focus states for better UX
+.select-container:hover:not(.is-disabled) {
+  .select:not(:disabled) {
+    border-color: var(--color-border-focus);
+  }
+
+  .select-icon {
+    color: var(--color-text-secondary);
+  }
+}
+
+// Mobile-specific enhancements
+@include mobile-only {
+  .select {
+    // Larger text on mobile to prevent zoom
+    font-size: 16px;
+
+    // Additional padding for easier touch interaction
+    padding: var(--space-4);
+    padding-right: var(--space-12);
+  }
+
+  .label {
+    // Slightly larger labels on mobile
+    font-size: var(--font-size-base);
+  }
+
+  .select-icon {
+    right: var(--space-4);
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+// Reduce motion for users who prefer it
+@media (prefers-reduced-motion: reduce) {
+  .select {
+    transition: none;
+  }
+
+  .select-icon {
+    transition: none;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .select {
+    border-width: 2px;
+
+    &:focus {
+      border-width: 3px;
+    }
+
+    &.error {
+      border-width: 2px;
+
+      &:focus {
+        border-width: 3px;
+      }
+    }
+  }
+
+  .select-icon {
+    svg {
+      stroke-width: 2.5;
+    }
+  }
+
+  .error-message {
+    font-weight: var(--font-weight-semibold);
+  }
+}

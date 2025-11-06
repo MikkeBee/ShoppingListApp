@@ -1,0 +1,84 @@
+@use '../../../styles/variables';
+@use '../../../styles/mixins';
+@use '../../../styles/breakpoints' as *;
+
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+
+  // Size variants with mobile-first approach
+  &.small {
+    max-width: 640px; // sm breakpoint
+  }
+
+  &.medium {
+    max-width: 768px; // md breakpoint
+  }
+
+  &.large {
+    max-width: 1024px; // lg breakpoint
+  }
+
+  &.full {
+    max-width: none;
+    padding: 0 var(--space-6);
+  }
+
+  // Modifier classes
+  &.noPadding {
+    padding: 0;
+  }
+
+  &.centerVertical {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+  }
+}
+
+// Responsive padding adjustments
+@include tablet-and-up {
+  .container {
+    padding: 0 var(--space-6);
+
+    &.full {
+      padding: 0 var(--space-8);
+    }
+  }
+}
+
+@include desktop-and-up {
+  .container {
+    padding: 0 var(--space-8);
+
+    &.small {
+      max-width: 720px;
+    }
+
+    &.medium {
+      max-width: 960px;
+    }
+
+    &.large {
+      max-width: 1200px;
+    }
+
+    &.full {
+      padding: 0 var(--space-12);
+    }
+  }
+}
+
+@include respond-to(xl) {
+  .container {
+    &.medium {
+      max-width: 1140px;
+    }
+
+    &.large {
+      max-width: 1320px;
+    }
+  }
+}

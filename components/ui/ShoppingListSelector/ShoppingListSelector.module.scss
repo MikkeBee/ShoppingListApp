@@ -1,0 +1,316 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+@use '../../../styles/breakpoints' as *;
+
+.selector {
+  position: relative;
+  width: 100%;
+}
+
+.selectorButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-4);
+  background-color: $color-dropdown-bg;
+  border: 2px solid $color-dropdown-border;
+  border-radius: $border-radius-lg;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+
+  &:hover {
+    background-color: $color-dropdown-hover;
+    border-color: $color-selector-border-focus;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $color-selector-border-focus;
+    box-shadow: var(--shadow-focus);
+  }
+
+  @include touch-target;
+}
+
+.selectorContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  flex: 1;
+}
+
+.selectorTitle {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: $color-dropdown-text;
+  margin-bottom: var(--space-1);
+}
+
+.selectorStats {
+  font-size: var(--font-size-sm);
+  color: $color-dropdown-text-muted;
+}
+
+.selectorIcon {
+  color: $color-dropdown-text-muted;
+  transition: transform 0.2s ease;
+  margin-left: var(--space-2);
+
+  &.selectorIconOpen {
+    transform: rotate(180deg);
+  }
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: $color-dropdown-bg;
+  border: 2px solid $color-dropdown-border;
+  border-radius: $border-radius-lg;
+  box-shadow: var(--shadow-lg);
+  margin-top: var(--space-1);
+  overflow: hidden;
+  animation: dropdownSlideIn 0.15s ease-out;
+}
+
+@keyframes dropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdownHeader {
+  padding: var(--space-3);
+  border-bottom: 1px solid $color-dropdown-border;
+  background-color: $color-gray-50;
+  display: flex;
+  gap: var(--space-2);
+}
+
+.homeButton {
+  flex: 1;
+}
+
+.createButton {
+  flex: 1;
+}
+
+.dropdownList {
+  max-height: 300px;
+  overflow-y: auto;
+
+  // Custom scrollbar for webkit browsers
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $color-gray-100;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $color-gray-300;
+    border-radius: $border-radius-full;
+
+    &:hover {
+      background: $color-gray-400;
+    }
+  }
+}
+
+.dropdownEmpty {
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  color: $color-dropdown-text-muted;
+  font-style: italic;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid $color-dropdown-border;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &.dropdownItemActive {
+    background-color: $color-selector-active-bg;
+    border-left: 3px solid $color-selector-active;
+  }
+}
+
+.dropdownItemButton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: var(--space-4);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: $color-dropdown-hover;
+  }
+
+  &:focus {
+    outline: none;
+    background-color: $color-dropdown-active;
+  }
+
+  @include touch-target;
+}
+
+.dropdownItemContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.dropdownItemName {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: $color-dropdown-text;
+  margin-bottom: var(--space-1);
+}
+
+.dropdownItemStats {
+  font-size: var(--font-size-sm);
+  color: $color-stats-text;
+}
+
+.dropdownItemDelete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $color-delete;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: $color-delete-light;
+    color: $color-delete-hover;
+  }
+
+  &:focus {
+    outline: none;
+    background-color: $color-delete-light;
+  }
+
+  @include touch-target;
+
+  svg {
+    pointer-events: none;
+  }
+}
+
+// Modal styles
+.createForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.createFormActions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+
+  @include mobile {
+    flex-direction: column-reverse;
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
+.deleteConfirm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.deleteMessage {
+  font-size: var(--font-size-base);
+  color: $color-dropdown-text;
+  margin: 0;
+}
+
+.deleteWarning {
+  font-size: var(--font-size-sm);
+  color: $color-stats-text;
+  margin: 0;
+  padding: var(--space-3);
+  background-color: $color-warning-light;
+  border-radius: $border-radius-md;
+  border-left: 4px solid $color-warning;
+}
+
+.deleteActions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+
+  @include mobile {
+    flex-direction: column-reverse;
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
+// Responsive adjustments
+@include tablet {
+  .selectorButton {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .dropdownItemButton {
+    padding: var(--space-3) var(--space-4);
+  }
+}
+
+@include desktop {
+  .dropdown {
+    min-width: 320px;
+  }
+
+  .createFormActions,
+  .deleteActions {
+    flex-direction: row;
+
+    button {
+      width: auto;
+      min-width: 100px;
+    }
+  }
+}
+
+// Fix dropdown alignment on large screens (1024px+)
+@include desktop {
+  .dropdown {
+    left: auto;
+    right: 0;
+    min-width: 400px;
+  }
+}

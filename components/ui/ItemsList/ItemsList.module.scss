@@ -1,0 +1,450 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+@use '../../../styles/breakpoints' as *;
+
+.itemsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+}
+
+// List Header with Statistics
+.listHeader {
+  background-color: $color-gray-50;
+  border-radius: $border-radius-lg;
+  padding: var(--space-4);
+  border: 1px solid $color-item-border;
+}
+
+.listStats {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+
+  @include mobile {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+  }
+}
+
+.statsText {
+  font-size: var(--font-size-sm);
+  color: $color-stats-text;
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+
+  @include mobile {
+    text-align: center;
+  }
+}
+
+.progressBar {
+  flex: 1;
+  height: 8px;
+  background-color: $color-progress-incomplete;
+  border-radius: $border-radius-full;
+  overflow: hidden;
+
+  @include mobile {
+    height: 6px;
+  }
+}
+
+.progressFill {
+  height: 100%;
+  background-color: $color-progress-complete;
+  transition: width 0.3s ease;
+}
+
+.progressPercent {
+  font-size: var(--font-size-sm);
+  color: $color-stats-number;
+  font-weight: var(--font-weight-semibold);
+  min-width: 40px;
+  text-align: right;
+
+  @include mobile {
+    text-align: center;
+    min-width: auto;
+  }
+}
+
+// Items Container
+.itemsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+// Category Groups
+.categoryGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.categoryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  background-color: $color-category-header-bg;
+  border: 1px solid $color-category-divider;
+  border-radius: $border-radius-md;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.categoryCount {
+  font-size: var(--font-size-sm);
+  color: $color-stats-text;
+  font-weight: var(--font-weight-medium);
+}
+
+.categoryItems {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-left: var(--space-2);
+
+  @include mobile {
+    padding-left: 0;
+  }
+}
+
+// Flat List Layout
+.flatList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+// Individual Item
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background-color: $color-item-bg;
+  border: 1px solid $color-item-border;
+  border-radius: $border-radius-md;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: $color-item-bg-hover;
+    border-color: $color-selector-border-focus;
+    box-shadow: var(--shadow-sm);
+  }
+
+  &:focus-within {
+    outline: none;
+    border-color: $color-selector-border-focus;
+    box-shadow: var(--shadow-focus);
+  }
+
+  @include mobile {
+    padding: var(--space-4);
+  }
+}
+
+.itemCompleted {
+  background-color: $color-item-completed-bg;
+  color: $color-item-completed;
+
+  .itemName {
+    text-decoration: line-through;
+    color: $color-item-text-completed;
+  }
+
+  .itemQuantity {
+    color: $color-item-text-completed;
+  }
+}
+
+.itemHighPriority {
+  border-left: 4px solid $color-delete;
+}
+
+.itemEditing {
+  border-color: $color-selector-active;
+  background-color: $color-selector-active-bg;
+}
+
+// Item Toggle/Checkbox
+.itemToggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-1);
+
+  @include touch-target;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid $color-toggle-unchecked;
+  border-radius: $border-radius-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+
+  &.checkboxChecked {
+    background-color: $color-toggle-checked;
+    border-color: $color-toggle-checked;
+    color: white;
+  }
+}
+
+// Item Content
+.itemContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.itemMain {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+
+  @include mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+  }
+}
+
+.itemName {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: $color-item-text;
+
+  @include mobile {
+    font-size: var(--font-size-sm);
+  }
+}
+
+.itemMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.itemQuantity {
+  font-size: var(--font-size-sm);
+  color: $color-item-quantity;
+  white-space: nowrap;
+}
+
+.priorityBadge {
+  font-size: var(--font-size-xs);
+  color: $color-delete;
+  background-color: $color-delete-light;
+  padding: 0.125rem 0.375rem;
+  border-radius: $border-radius-full;
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+}
+
+.itemNotes {
+  font-size: var(--font-size-sm);
+  color: $color-stats-text;
+  font-style: italic;
+}
+
+// Item Category
+.itemCategory {
+  display: flex;
+  align-items: center;
+
+  @include mobile {
+    display: none; // Hide on mobile to save space
+  }
+}
+
+// Item Actions
+.itemActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+
+  @include mobile {
+    gap: var(--space-2);
+  }
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: $border-radius-sm;
+  color: $color-stats-text;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: $color-action-hover;
+    color: $color-dropdown-text;
+  }
+
+  &:focus {
+    outline: none;
+    background-color: $color-action-active;
+  }
+
+  &:last-child {
+    color: $color-delete;
+
+    &:hover {
+      background-color: $color-delete-light;
+      color: $color-delete-hover;
+    }
+  }
+
+  @include touch-target;
+}
+
+// Empty States
+.noList,
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-12) var(--space-6);
+  text-align: center;
+  color: $color-stats-text;
+
+  @include mobile {
+    padding: var(--space-8) var(--space-4);
+  }
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  margin-bottom: var(--space-4);
+  opacity: 0.5;
+}
+
+.emptyTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: $color-dropdown-text;
+  margin: 0 0 var(--space-2) 0;
+}
+
+.emptyDescription {
+  font-size: var(--font-size-base);
+  color: $color-stats-text;
+  margin: 0;
+}
+
+// Responsive Adjustments
+@include tablet {
+  .item {
+    padding: var(--space-4);
+  }
+
+  .itemCategory {
+    display: flex; // Show category badges on tablet+
+  }
+
+  .itemMain {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .itemName {
+    font-size: var(--font-size-base);
+  }
+}
+
+@include desktop {
+  .itemsList {
+    max-width: 800px;
+  }
+
+  .item {
+    padding: var(--space-5);
+  }
+
+  .categoryHeader {
+    padding: var(--space-4) var(--space-5);
+  }
+
+  .categoryItems {
+    padding-left: var(--space-4);
+  }
+}
+
+// Pull-to-refresh styles
+.pullIndicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-4);
+  margin-bottom: var(--space-2);
+}
+
+.refreshSpinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  color: $color-primary;
+  font-size: var(--font-size-sm);
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid $color-primary;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.pullPrompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  color: #6b7280;
+  font-size: var(--font-size-sm);
+}
+
+.pullProgress {
+  width: 40px;
+  height: 4px;
+  background-color: #e5e7eb;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.pullProgressFill {
+  height: 100%;
+  background-color: $color-primary;
+  transition: width 0.1s ease;
+}

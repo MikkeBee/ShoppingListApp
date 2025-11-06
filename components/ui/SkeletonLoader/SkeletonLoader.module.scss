@@ -1,0 +1,133 @@
+// Skeleton Loader Styles
+@use '../../../styles/animation-variables' as anim;
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-neutral-200) 25%,
+    var(--color-neutral-100) 50%,
+    var(--color-neutral-200) 75%
+  );
+  background-size: 200% 100%;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: inherit;
+  }
+
+  // Variants
+  &.text {
+    border-radius: var(--radius-sm);
+    min-height: 1rem;
+  }
+
+  &.rectangular {
+    border-radius: var(--radius-md);
+  }
+
+  &.rounded {
+    border-radius: var(--radius-lg);
+  }
+
+  &.circular {
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  // Animation speeds
+  &.animated {
+    &.fast {
+      animation: skeleton-loading 1s ease-in-out infinite;
+    }
+
+    &.normal {
+      animation: skeleton-loading 1.5s ease-in-out infinite;
+    }
+
+    &.slow {
+      animation: skeleton-loading 2s ease-in-out infinite;
+    }
+  }
+
+  // Respect reduced motion
+  @media (prefers-reduced-motion: reduce) {
+    &.animated {
+      animation: none;
+      background: var(--color-neutral-200);
+    }
+  }
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.itemSkeleton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+
+  .itemContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
+
+.listSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.headerSkeleton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+// Keyframe for skeleton loading animation
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Dark theme support
+[data-theme='dark'] {
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--color-neutral-700) 25%,
+      var(--color-neutral-600) 50%,
+      var(--color-neutral-700) 75%
+    );
+
+    @media (prefers-reduced-motion: reduce) {
+      &.animated {
+        background: var(--color-neutral-700);
+      }
+    }
+  }
+}

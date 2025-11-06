@@ -1,0 +1,151 @@
+@use '../../../styles/variables';
+@use '../../../styles/mixins';
+@use '../../../styles/breakpoints' as *;
+
+.header {
+  background-color: var(--color-background); // off-white
+  border-bottom: 1px solid var(--color-border-light);
+  position: relative;
+  z-index: 100;
+
+  // Sticky positioning for mobile
+  &.sticky {
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(8px);
+    background-color: rgb(250 250 250 / 0.95);
+  }
+}
+
+.headerContainer {
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-4);
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 44px; // Touch target minimum
+}
+
+.titleSection {
+  flex: 1;
+  min-width: 0; // Allow text truncation
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary); // darker blue
+  line-height: var(--line-height-tight);
+
+  // Truncate long titles on mobile
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.actionsSection {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.rightContent {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--color-neutral-100);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  @include mixins.touch-target;
+
+  &:hover {
+    background-color: var(--color-neutral-200);
+    border-color: var(--color-border);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-border-focus);
+    box-shadow: var(--shadow-focus);
+  }
+}
+
+.placeholderText {
+  font-weight: var(--font-weight-medium);
+}
+
+.placeholderIcon {
+  flex-shrink: 0;
+  transition: transform 0.2s ease-in-out;
+
+  .placeholder:hover & {
+    transform: translateY(1px);
+  }
+}
+
+// Tablet and desktop adjustments
+@include tablet-and-up {
+  .headerContainer {
+    padding-top: var(--space-5);
+    padding-bottom: var(--space-5);
+  }
+
+  .title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .placeholder {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--font-size-base);
+  }
+}
+
+@include desktop-and-up {
+  .headerContent {
+    gap: var(--space-6);
+  }
+
+  .actionsSection {
+    gap: var(--space-4);
+  }
+
+  .title {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .header {
+    border-bottom-width: 2px;
+  }
+
+  .placeholder {
+    border-width: 2px;
+  }
+}
+
+// Reduce motion for users who prefer it
+@media (prefers-reduced-motion: reduce) {
+  .placeholder,
+  .placeholderIcon {
+    transition: none;
+  }
+}

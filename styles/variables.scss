@@ -1,0 +1,231 @@
+// SCSS Variables for Shopping List Application
+// This file contains all design tokens including colors, typography, spacing, etc.
+
+// Base Colors (off-white background, darker blue text)
+:root {
+  // Base Colors
+  --color-background: #fafafa; // Off-white background
+  --color-surface: #ffffff; // Card/surface white
+  --color-surface-hover: #f8fafc; // Hover state for surfaces
+  --color-text-primary: #1e3a8a; // Darker blue text
+  --color-text-secondary: #3b82f6; // Medium blue
+  --color-text-muted: #6b7280; // Gray text
+  --color-text-inverse: #ffffff; // White text for dark backgrounds
+
+  // Action Colors (green/yellow/red for add/edit/delete)
+  --color-add: #22c55e; // Green - Add actions
+  --color-add-hover: #16a34a; // Darker green for hover
+  --color-add-light: #dcfce7; // Light green for backgrounds
+
+  --color-edit: #eab308; // Yellow - Edit actions
+  --color-edit-hover: #ca8a04; // Darker yellow for hover
+  --color-edit-light: #fef3c7; // Light yellow for backgrounds
+
+  --color-delete: #ef4444; // Red - Delete actions
+  --color-delete-hover: #dc2626; // Darker red for hover
+  --color-delete-light: #fecaca; // Light red for backgrounds
+
+  // State Colors
+  --color-success: #10b981;
+  --color-success-light: #d1fae5;
+  --color-warning: #f59e0b;
+  --color-warning-light: #fef3c7;
+  --color-error: #f87171;
+  --color-error-light: #fecaca;
+  --color-info: #3b82f6;
+  --color-info-light: #dbeafe;
+
+  // Neutral Colors
+  --color-border: #e5e7eb;
+  --color-border-light: #f3f4f6;
+  --color-border-focus: #3b82f6;
+  --color-disabled: #9ca3af;
+  --color-disabled-light: #f9fafb;
+
+  // Category Colors for Shopping Items
+  --color-category-meat: #dc2626;
+  --color-category-dairy: #2563eb;
+  --color-category-fish: #0891b2;
+  --color-category-fruits: #ea580c;
+  --color-category-vegetables: #16a34a;
+  --color-category-grains: #ca8a04;
+  --color-category-pantry: #7c2d12;
+  --color-category-frozen: #06b6d4;
+  --color-category-beverages: #7c3aed;
+  --color-category-snacks: #dc2626;
+  --color-category-household: #6b7280;
+  --color-category-personal: #ec4899;
+  --color-category-other: #64748b;
+
+  // Shadows
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg:
+    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl:
+    0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-focus: 0 0 0 3px rgb(59 130 246 / 0.1);
+}
+
+// Font Family
+:root {
+  --font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  // Font Sizes (Mobile-first)
+  --font-size-xs: 0.75rem; // 12px
+  --font-size-sm: 0.875rem; // 14px
+  --font-size-base: 1rem; // 16px
+  --font-size-lg: 1.125rem; // 18px
+  --font-size-xl: 1.25rem; // 20px
+  --font-size-2xl: 1.5rem; // 24px
+  --font-size-3xl: 1.875rem; // 30px
+
+  // Line Heights
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+
+  // Font Weights
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
+
+// Spacing Scale
+:root {
+  --space-1: 0.25rem; // 4px
+  --space-2: 0.5rem; // 8px
+  --space-3: 0.75rem; // 12px
+  --space-4: 1rem; // 16px
+  --space-5: 1.25rem; // 20px
+  --space-6: 1.5rem; // 24px
+  --space-8: 2rem; // 32px
+  --space-10: 2.5rem; // 40px
+  --space-12: 3rem; // 48px
+  --space-16: 4rem; // 64px
+
+  // Container Sizes
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+
+  // Border Radius
+  --border-radius-sm: 0.25rem;
+  --border-radius-md: 0.375rem;
+  --border-radius-lg: 0.5rem;
+  --border-radius-xl: 0.75rem;
+  --border-radius-full: 9999px;
+}
+
+// SCSS Variables (for use in @use imports)
+// Border Radius
+$border-radius-sm: 0.25rem;
+$border-radius-md: 0.375rem;
+$border-radius-lg: 0.5rem;
+$border-radius-xl: 0.75rem;
+$border-radius-full: 9999px;
+
+// Colors (commonly used SCSS variables)
+$color-white: #ffffff;
+$color-black: #000000;
+$color-transparent: transparent;
+
+// Gray scale
+$color-gray-50: #f9fafb;
+$color-gray-100: #f3f4f6;
+$color-gray-200: #e5e7eb;
+$color-gray-300: #d1d5db;
+$color-gray-400: #9ca3af;
+$color-gray-500: #6b7280;
+$color-gray-600: #4b5563;
+$color-gray-700: #374151;
+$color-gray-800: #1f2937;
+$color-gray-900: #111827;
+
+// Action colors (from CSS custom properties)
+$color-add: #22c55e;
+$color-add-hover: #16a34a;
+$color-add-light: #dcfce7;
+$color-edit: #eab308;
+$color-edit-hover: #ca8a04;
+$color-edit-light: #fef3c7;
+$color-delete: #ef4444;
+$color-delete-hover: #dc2626;
+$color-delete-light: #fecaca;
+
+// Primary theme colors
+$color-primary: #3b82f6;
+$color-primary-light: #dbeafe;
+$color-primary-dark: #1e40af;
+
+// State colors
+$color-success: #10b981;
+$color-success-light: #d1fae5;
+$color-success-dark: #065f46;
+$color-warning: #f59e0b;
+$color-warning-light: #fef3c7;
+$color-error: #ef4444;
+$color-error-light: #fecaca;
+$color-info: #3b82f6;
+$color-info-light: #dbeafe;
+
+// Dropdown & Selector specific variables
+$color-dropdown-bg: #ffffff;
+$color-dropdown-border: #e5e7eb;
+$color-dropdown-shadow: rgba(0, 0, 0, 0.1);
+$color-dropdown-hover: #f8fafc;
+$color-dropdown-active: #f1f5f9;
+$color-dropdown-text: #1e3a8a;
+$color-dropdown-text-muted: #64748b;
+
+// List selector variables
+$color-selector-active: #3b82f6;
+$color-selector-active-bg: #eff6ff;
+$color-selector-border-focus: #3b82f6;
+
+// Modal/overlay variables
+$color-overlay: rgba(0, 0, 0, 0.5);
+$color-modal-bg: #ffffff;
+$color-modal-shadow: rgba(0, 0, 0, 0.25);
+
+// Statistics colors
+$color-stats-text: #6b7280;
+$color-stats-number: #1e3a8a;
+$color-progress-complete: #10b981;
+$color-progress-incomplete: #e5e7eb;
+
+// Form specific variables
+$color-form-bg: #ffffff;
+$color-form-border: #e5e7eb;
+$color-form-border-focus: #3b82f6;
+$color-form-border-error: #ef4444;
+$color-form-label: #374151;
+$color-form-text: #1f2937;
+$color-form-placeholder: #9ca3af;
+$color-form-error-text: #dc2626;
+$color-form-error-bg: #fef2f2;
+
+// Item list variables
+$color-item-bg: #ffffff;
+$color-item-bg-hover: #f8fafc;
+$color-item-border: #e5e7eb;
+$color-item-completed: #6b7280;
+$color-item-completed-bg: #f3f4f6;
+$color-item-text: #1f2937;
+$color-item-text-completed: #9ca3af;
+$color-item-quantity: #6b7280;
+
+// Category section variables
+$color-category-header: #374151;
+$color-category-header-bg: #f9fafb;
+$color-category-divider: #e5e7eb;
+
+// Action button variables (for item actions)
+$color-action-hover: #f3f4f6;
+$color-action-active: #e5e7eb;
+$color-toggle-checked: #10b981;
+$color-toggle-unchecked: #d1d5db;

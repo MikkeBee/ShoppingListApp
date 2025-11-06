@@ -1,0 +1,98 @@
+@use '@/styles/variables' as *;
+@use '@/styles/breakpoints' as *;
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: $border-radius-full;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+
+  // Use CSS custom properties for dynamic colors
+  color: var(--category-color);
+  background-color: var(--category-bg);
+  border-color: var(--category-color);
+
+  // Size variants
+  &.small {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+
+    .icon {
+      font-size: 0.875rem;
+    }
+  }
+
+  &.medium {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+
+    .icon {
+      font-size: 1rem;
+    }
+  }
+
+  &.large {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+
+    .icon {
+      font-size: 1.125rem;
+    }
+  }
+
+  // Interactive state
+  &.interactive {
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--category-color);
+      color: $color-white;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    &:focus {
+      outline: 2px solid var(--category-color);
+      outline-offset: 2px;
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.label {
+  white-space: nowrap;
+
+  // Hide label on very small screens for space efficiency
+  @include mobile-only {
+    .badge.small & {
+      display: none;
+    }
+  }
+}
+
+// Special styling for dark theme
+@media (prefers-color-scheme: dark) {
+  .badge {
+    border-color: var(--category-color);
+
+    &.interactive:hover {
+      color: $color-gray-900;
+    }
+  }
+}

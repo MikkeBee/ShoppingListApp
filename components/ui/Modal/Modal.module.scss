@@ -1,0 +1,293 @@
+@use '../../../styles/variables';
+@use '../../../styles/mixins';
+@use '../../../styles/breakpoints' as *;
+
+// Overlay that covers the entire viewport
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+
+  // Animation
+  animation: fadeIn 0.2s ease-out;
+
+  @include mobile-only {
+    padding: var(--space-2);
+    align-items: flex-end;
+  }
+}
+
+// Modal container
+.modal {
+  background: var(--color-background);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  max-height: 90vh;
+  max-width: 90vw;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+
+  // Animation
+  animation: slideIn 0.3s ease-out;
+
+  // Focus outline
+  &:focus {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
+
+  @include mobile-only {
+    max-height: 80vh;
+    max-width: 100%;
+    width: 100%;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    animation: slideUp 0.3s ease-out;
+  }
+}
+
+// Modal sizes
+.small {
+  width: 400px;
+
+  @include mobile-only {
+    width: 100%;
+  }
+}
+
+.medium {
+  width: 500px;
+
+  @include mobile-only {
+    width: 100%;
+  }
+}
+
+.large {
+  width: 700px;
+
+  @include mobile-only {
+    width: 100%;
+  }
+}
+
+.full {
+  width: 90vw;
+  height: 90vh;
+
+  @include mobile-only {
+    width: 100%;
+    height: 80vh;
+  }
+}
+
+// Modal header
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--color-border-light);
+  background: var(--color-background-elevated);
+
+  @include mobile-only {
+    padding: var(--space-4);
+  }
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+
+  @include mobile-only {
+    font-size: var(--font-size-lg);
+  }
+}
+
+.close-button {
+  @include mixins.touch-target;
+
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  outline: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  background: transparent;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background: var(--color-background-hover);
+    color: var(--color-text-secondary);
+  }
+
+  &:focus {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+    background: var(--color-background-hover);
+    color: var(--color-text-secondary);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  @include mobile-only {
+    width: 44px;
+    height: 44px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+// Modal content
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-6);
+
+  // Custom scrollbar
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) var(--color-background);
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-background);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: var(--radius-full);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-hover);
+  }
+
+  @include mobile-only {
+    padding: var(--space-4);
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Reduce motion for users who prefer it
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .modal {
+    animation: none;
+  }
+
+  .close-button {
+    transition: none;
+
+    &:active {
+      transform: none;
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .overlay {
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .modal {
+    border: 2px solid var(--color-border);
+  }
+
+  .header {
+    border-bottom-width: 2px;
+  }
+
+  .close-button {
+    border: 1px solid var(--color-border);
+
+    &:hover,
+    &:focus {
+      border-color: var(--color-border-focus);
+    }
+  }
+}
+
+// Dark theme support (if implemented later)
+@media (prefers-color-scheme: dark) {
+  .overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  .modal {
+    box-shadow:
+      0 25px 50px -12px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+}
