@@ -1,0 +1,486 @@
+# SpecKit Specification: Shopping List Application
+
+## 1. Application Overview
+
+### 1.1 Purpose
+A React-based shopping list management application that allows users to create, organize, and manage shopping lists with categorized items. The application focuses on simplicity, usability, and efficient organization of shopping items.
+
+### 1.2 Core Features
+- Create and manage multiple shopping lists
+- Add items with categories and quantities
+- Edit and delete individual items
+- Organize items by predefined categories
+- Real-time local state management (no external persistence)
+- Responsive design for mobile and desktop use
+
+### 1.3 Technical Stack
+- **Framework**: Next.js 14+ with App Router
+- **Language**: TypeScript (strict mode)
+- **Styling**: CSS Modules + Tailwind CSS
+- **State Management**: React Context + useReducer
+- **Testing**: Jest + React Testing Library
+- **Linting**: ESLint + Prettier
+
+## 2. User Stories & Requirements
+
+### 2.1 Epic: Shopping List Management
+**As a user, I want to manage multiple shopping lists so that I can organize shopping for different occasions or stores.**
+
+#### User Stories:
+1. **Create New List**: As a user, I can create a new shopping list with a custom name
+2. **View All Lists**: As a user, I can see all my shopping lists in an organized view
+3. **Select Active List**: As a user, I can select which list I'm currently working on
+4. **Delete Lists**: As a user, I can delete entire shopping lists I no longer need
+5. **Rename Lists**: As a user, I can rename existing shopping lists
+
+### 2.2 Epic: Item Management
+**As a user, I want to add, edit, and organize items within my shopping lists.**
+
+#### User Stories:
+1. **Add Items**: As a user, I can add new items with name, quantity, and category
+2. **Edit Items**: As a user, I can edit any item's name, quantity, or category
+3. **Delete Items**: As a user, I can remove items from my shopping list
+4. **Mark Complete**: As a user, I can mark items as purchased/complete
+5. **Bulk Actions**: As a user, I can select multiple items for bulk operations
+
+### 2.3 Epic: Categorization
+**As a user, I want to organize items by categories for efficient shopping.**
+
+#### User Stories:
+1. **Predefined Categories**: As a user, I can choose from predefined categories when adding items
+2. **Category Grouping**: As a user, I can view items grouped by their categories
+3. **Category Filtering**: As a user, I can filter items by specific categories
+4. **Category Statistics**: As a user, I can see how many items are in each category
+
+## 3. Functional Requirements
+
+### 3.1 Shopping List Operations
+
+#### 3.1.1 Create Shopping List
+- **Input**: List name (required, 1-50 characters)
+- **Validation**: Name must be unique, no special characters except spaces and hyphens
+- **Output**: New list created and set as active
+- **Error Handling**: Display error for duplicate names or invalid characters
+
+#### 3.1.2 List Management
+- **View Lists**: Display all lists with item counts and last modified dates
+- **Switch Lists**: One-click switching between lists
+- **Delete Lists**: Confirmation dialog before deletion
+- **Rename Lists**: Inline editing with validation
+
+### 3.2 Item Operations
+
+#### 3.2.1 Add Item
+```typescript
+interface ShoppingItem {
+  id: string;
+  name: string;
+  quantity: number | string;
+  unit?: string;
+  category: ItemCategory;
+  isCompleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+```
+
+- **Input Fields**:
+  - Name: Required, 1-100 characters
+  - Quantity: Required, positive number or text (e.g., "2", "1 kg", "a bunch")
+  - Unit: Optional, predefined units (kg, g, L, ml, pieces, etc.)
+  - Category: Required, dropdown selection
+
+#### 3.2.2 Edit Item
+- **Inline Editing**: Click to edit any field directly in the list
+- **Modal Editing**: Full edit form for complex changes
+- **Auto-save**: Changes saved automatically after 500ms delay
+- **Validation**: Same rules as add item
+
+#### 3.2.3 Delete Item
+- **Single Delete**: Swipe or click action with confirmation
+- **Bulk Delete**: Multi-select with batch delete option
+- **Undo**: 5-second undo option after deletion
+
+### 3.3 Category System
+
+#### 3.3.1 Predefined Categories
+```typescript
+enum ItemCategory {
+  MEAT = 'meat',
+  DAIRY = 'dairy',
+  FISH_SEAFOOD = 'fish-seafood',
+  FRUITS = 'fruits',
+  VEGETABLES = 'vegetables',
+  GRAINS_BREAD = 'grains-bread',
+  PANTRY = 'pantry',
+  FROZEN = 'frozen',
+  BEVERAGES = 'beverages',
+  SNACKS = 'snacks',
+  HOUSEHOLD = 'household',
+  PERSONAL_CARE = 'personal-care',
+  OTHER = 'other'
+}
+```
+
+#### 3.3.2 Category Display
+- **Color Coding**: Each category has a unique color
+- **Icons**: Visual icons for each category
+- **Grouping**: Items grouped by category in list view
+- **Sorting**: Categories ordered by shopping flow (produce → dairy → meat → frozen, etc.)
+
+## 4. User Interface Specifications
+
+### 4.1 Layout Structure
+```
+┌─────────────────────────────────┐
+│           Header                │
+│  [App Title] [List Selector]    │
+├─────────────────────────────────┤
+│         Navigation              │
+│  [All Lists] [Add List] [...]   │
+├─────────────────────────────────┤
+│         Main Content            │
+│                                 │
+│  ┌─── Add Item Form ───┐       │
+│  │ [Name] [Qty] [Cat]  │       │
+│  │      [Add Button]    │       │
+│  └─────────────────────┘       │
+│                                 │
+│  ┌─── Items by Category ───┐   │
+│  │ 🥩 Meat (2 items)        │   │
+│  │   ☐ Chicken breast 1kg   │   │
+│  │   ☐ Ground beef 500g     │   │
+│  │                          │   │
+│  │ 🥛 Dairy (1 item)        │   │
+│  │   ☐ Milk 1L             │   │
+│  └─────────────────────────┘   │
+└─────────────────────────────────┘
+```
+
+### 4.2 Component Specifications
+
+#### 4.2.1 Header Component
+- **ShoppingListSelector**: Dropdown to switch between lists
+- **AppTitle**: Application branding
+- **ListStats**: Current list item count and completion percentage
+
+#### 4.2.2 AddItemForm Component
+- **ItemNameInput**: Text input with autocomplete suggestions
+- **QuantityInput**: Number/text input with unit selector
+- **CategorySelect**: Dropdown with icons and colors
+- **AddButton**: Primary CTA button with loading state
+
+#### 4.2.3 ItemsList Component
+- **CategoryGroup**: Collapsible sections for each category
+- **ItemRow**: Individual item with edit/delete actions
+- **BulkActions**: Multi-select with batch operations
+- **EmptyState**: Helpful message when no items exist
+
+#### 4.2.4 ItemRow Component
+```typescript
+interface ItemRowProps {
+  item: ShoppingItem;
+  onEdit: (id: string, updates: Partial<ShoppingItem>) => void;
+  onDelete: (id: string) => void;
+  onToggleComplete: (id: string) => void;
+  isEditing: boolean;
+  onStartEdit: (id: string) => void;
+  onCancelEdit: () => void;
+}
+```
+
+### 4.3 Responsive Design
+
+#### 4.3.1 Mobile (< 768px)
+- **Single Column Layout**: Full-width components
+- **Touch Targets**: Minimum 44px touch targets
+- **Swipe Gestures**: Swipe to delete items
+- **Bottom Sheet**: Modal forms slide up from bottom
+- **Sticky Header**: Header remains visible during scroll
+
+#### 4.3.2 Tablet (768px - 1024px)
+- **Two Column Layout**: Form on left, items on right
+- **Sidebar Navigation**: Collapsible list selector
+- **Grid Layout**: 2-column item grid for wider screens
+
+#### 4.3.3 Desktop (> 1024px)
+- **Three Column Layout**: Lists | Form | Items
+- **Keyboard Shortcuts**: Support for common actions
+- **Hover States**: Enhanced interactive feedback
+- **Context Menus**: Right-click actions for items
+
+## 5. Technical Implementation
+
+### 5.1 State Management
+
+#### 5.1.1 Application State
+```typescript
+interface AppState {
+  lists: ShoppingList[];
+  activeListId: string | null;
+  ui: {
+    isLoading: boolean;
+    editingItemId: string | null;
+    selectedItems: string[];
+    showDeletedMessage: boolean;
+    lastDeletedItems: ShoppingItem[];
+  };
+}
+
+interface ShoppingList {
+  id: string;
+  name: string;
+  items: ShoppingItem[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+```
+
+#### 5.1.2 Context Structure
+```typescript
+// contexts/ShoppingContext.tsx
+const ShoppingContext = createContext<{
+  state: AppState;
+  dispatch: React.Dispatch<AppAction>;
+  actions: {
+    addList: (name: string) => void;
+    deleteList: (id: string) => void;
+    setActiveList: (id: string) => void;
+    addItem: (listId: string, item: Omit<ShoppingItem, 'id' | 'createdAt' | 'updatedAt'>) => void;
+    updateItem: (listId: string, itemId: string, updates: Partial<ShoppingItem>) => void;
+    deleteItem: (listId: string, itemId: string) => void;
+    toggleItemComplete: (listId: string, itemId: string) => void;
+    bulkDeleteItems: (listId: string, itemIds: string[]) => void;
+  };
+} | null>(null);
+```
+
+### 5.2 Local Storage Strategy
+
+#### 5.2.1 Persistence Layer
+```typescript
+// utils/storage.ts
+interface StorageManager {
+  save: (data: AppState) => void;
+  load: () => AppState | null;
+  clear: () => void;
+  backup: () => string;
+  restore: (backup: string) => AppState;
+}
+```
+
+#### 5.2.2 Auto-save Implementation
+- **Debounced Saves**: Save to localStorage 1 second after state changes
+- **Error Handling**: Graceful fallback if localStorage is unavailable
+- **Data Validation**: Validate data structure before saving/loading
+- **Migration Support**: Handle schema changes for future versions
+
+### 5.3 Performance Optimizations
+
+#### 5.3.1 React Optimizations
+- **useMemo**: Memoize expensive calculations (filtered items, category counts)
+- **useCallback**: Memoize event handlers to prevent unnecessary re-renders
+- **React.memo**: Wrap pure components to prevent unnecessary re-renders
+- **Virtual Scrolling**: Implement for lists with 100+ items
+
+#### 5.3.2 Bundle Optimization
+- **Code Splitting**: Lazy load non-critical components
+- **Tree Shaking**: Ensure unused code is eliminated
+- **Dynamic Imports**: Load modals and forms on demand
+
+## 6. User Experience Details
+
+### 6.1 Interaction Patterns
+
+#### 6.1.1 Adding Items
+1. **Quick Add**: Type name, press Enter (uses default category and quantity 1)
+2. **Full Add**: Fill all fields then click Add button
+3. **Batch Add**: Paste text list and auto-parse items
+4. **Voice Input**: Optional speech-to-text for item names
+
+#### 6.1.2 Editing Items
+1. **Inline Edit**: Click any field to edit in place
+2. **Quick Toggle**: Tap checkbox to mark complete/incomplete
+3. **Drag to Reorder**: Drag items to change order within categories
+4. **Swipe Actions**: Swipe left for delete, right for edit
+
+#### 6.1.3 Navigation Flow
+```
+Home → Select/Create List → Add Items → Edit Items → Mark Complete
+  ↓                                                         ↓
+Shopping Mode (categorized view) ← ← ← ← ← ← ← ← ← ← ← ← ← ←
+```
+
+### 6.2 Accessibility Features
+
+#### 6.2.1 Keyboard Navigation
+- **Tab Order**: Logical tab sequence through all interactive elements
+- **Shortcuts**: 
+  - `Ctrl/Cmd + N`: New list
+  - `Ctrl/Cmd + I`: Add item
+  - `Space`: Toggle item completion
+  - `Delete`: Delete selected items
+  - `Escape`: Cancel current operation
+
+#### 6.2.2 Screen Reader Support
+- **ARIA Labels**: Comprehensive labeling for all interactive elements
+- **Live Regions**: Announce state changes (item added, deleted, etc.)
+- **Semantic HTML**: Proper heading hierarchy and list structures
+- **Focus Management**: Proper focus handling for modals and dynamic content
+
+#### 6.2.3 Visual Accessibility
+- **High Contrast**: Support for high contrast mode
+- **Font Scaling**: Respect user's font size preferences
+- **Color Independence**: Don't rely solely on color for information
+- **Focus Indicators**: Clear focus rings for keyboard navigation
+
+### 6.3 Error Handling
+
+#### 6.3.1 User-Facing Errors
+- **Validation Errors**: Inline error messages with clear guidance
+- **Network Errors**: Not applicable (local-only app)
+- **Storage Errors**: Graceful degradation if localStorage fails
+- **Unexpected Errors**: Error boundary with recovery options
+
+#### 6.3.2 Error Messages
+```typescript
+const ErrorMessages = {
+  DUPLICATE_LIST_NAME: 'A list with this name already exists. Please choose a different name.',
+  INVALID_ITEM_NAME: 'Item name must be between 1 and 100 characters.',
+  INVALID_QUANTITY: 'Please enter a valid quantity (number or text).',
+  STORAGE_FULL: 'Unable to save changes. Please try removing some items.',
+  GENERIC_ERROR: 'Something went wrong. Please try again.'
+};
+```
+
+## 7. Testing Strategy
+
+### 7.1 Unit Tests
+
+#### 7.1.1 Utility Functions
+- **Storage utilities**: save, load, validate data
+- **Category helpers**: sorting, filtering, grouping
+- **Validation functions**: input validation, data sanitization
+- **Date/time utilities**: formatting, comparison
+
+#### 7.1.2 Custom Hooks
+- **useShoppingList**: State management hook
+- **useLocalStorage**: Persistence hook
+- **useDebounce**: Auto-save debouncing
+- **useKeyboardShortcuts**: Keyboard navigation
+
+### 7.2 Component Tests
+
+#### 7.2.1 Component Behavior
+```typescript
+// tests/components/AddItemForm.test.tsx
+describe('AddItemForm', () => {
+  it('should add item when form is submitted with valid data', () => {});
+  it('should show validation errors for invalid input', () => {});
+  it('should clear form after successful submission', () => {});
+  it('should handle category selection correctly', () => {});
+});
+```
+
+#### 7.2.2 Integration Tests
+- **Full user flows**: Add list → Add items → Edit items → Delete items
+- **State persistence**: Data saves and loads correctly
+- **Error scenarios**: Handles edge cases gracefully
+
+### 7.3 End-to-End Tests
+
+#### 7.3.1 Critical Paths
+1. **Create and manage lists**: Full list lifecycle
+2. **Item management**: Add, edit, delete, complete items
+3. **Category organization**: Items grouped and sorted correctly
+4. **Responsive behavior**: Works across device sizes
+
+## 8. Performance Requirements
+
+### 8.1 Core Web Vitals Targets
+- **LCP**: < 1.5s (optimized for local-only app)
+- **FID**: < 100ms
+- **CLS**: < 0.1
+- **FCP**: < 1.0s
+
+### 8.2 Application Performance
+- **Initial Load**: < 2s to interactive
+- **Item Operations**: < 100ms response time
+- **List Switching**: < 200ms transition
+- **Search/Filter**: < 50ms for up to 1000 items
+
+### 8.3 Memory Usage
+- **Maximum Items**: Support up to 10,000 items across all lists
+- **Memory Footprint**: < 50MB in browser
+- **Storage Limit**: < 5MB localStorage usage
+
+## 9. Security Considerations
+
+### 9.1 Data Protection
+- **Local Storage Only**: No external data transmission
+- **Input Sanitization**: Prevent XSS through user input
+- **Data Validation**: Validate all data before processing
+- **No Sensitive Data**: App doesn't handle sensitive information
+
+### 9.2 Content Security Policy
+```typescript
+// next.config.ts
+const cspHeader = `
+  default-src 'self';
+  script-src 'self' 'unsafe-eval' 'unsafe-inline';
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' blob: data:;
+  font-src 'self';
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+  frame-ancestors 'none';
+  upgrade-insecure-requests;
+`;
+```
+
+## 10. Development Phases
+
+### 10.1 Phase 1: Core Functionality (Week 1-2)
+- [ ] Basic Next.js setup with TypeScript
+- [ ] Core state management with Context
+- [ ] Add/edit/delete items functionality
+- [ ] Category system implementation
+- [ ] Local storage persistence
+
+### 10.2 Phase 2: User Experience (Week 3)
+- [ ] Responsive design implementation
+- [ ] Enhanced UI components
+- [ ] Keyboard navigation
+- [ ] Accessibility features
+- [ ] Error handling
+
+### 10.3 Phase 3: Polish & Testing (Week 4)
+- [ ] Performance optimizations
+- [ ] Comprehensive testing suite
+- [ ] Documentation completion
+- [ ] Cross-browser testing
+- [ ] User acceptance testing
+
+### 10.4 Phase 4: Advanced Features (Future)
+- [ ] Import/export functionality
+- [ ] Print shopping list
+- [ ] Dark mode support
+- [ ] PWA capabilities
+- [ ] Offline functionality
+
+## 11. Success Metrics
+
+### 11.1 Technical Metrics
+- **Test Coverage**: > 80% for all code
+- **Performance Score**: Lighthouse score > 95
+- **Accessibility Score**: 100% WCAG 2.1 AA compliance
+- **Bundle Size**: < 200KB initial bundle
+
+### 11.2 User Experience Metrics
+- **Task Completion**: Users can complete all core tasks without assistance
+- **Error Rate**: < 1% user-facing errors
+- **Load Time**: 95% of interactions complete within performance targets
+- **Responsive Design**: Works perfectly on mobile, tablet, and desktop
+
+This specification provides a comprehensive blueprint for building a high-quality shopping list application that adheres to the principles established in the SpecKit Constitution.

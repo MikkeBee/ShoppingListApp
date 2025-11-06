@@ -1,0 +1,1100 @@
+# SpecKit Implementation Plan: Shopping List Application
+
+## 1. Project Setup & Architecture
+
+### 1.1 Technology Stack
+- **Framework**: Next.js 14+ (App Router)
+- **Language**: TypeScript (strict mode)
+- **Styling**: SCSS with CSS Modules
+- **Hosting**: Vercel
+- **State Management**: React Context + useReducer
+- **Testing**: Jest + React Testing Library + Playwright
+- **Package Manager**: npm
+
+### 1.2 Project Structure
+```
+shopping/
+├── app/                          # Next.js App Router
+│   ├── globals.scss              # Global styles
+│   ├── layout.tsx                # Root layout
+│   ├── page.tsx                  # Home page
+│   └── components/               # Page-specific components
+├── components/                   # Shared components
+│   ├── ui/                       # Base UI components
+│   │   ├── Button/
+│   │   │   ├── Button.tsx
+│   │   │   ├── Button.module.scss
+│   │   │   └── index.ts
+│   │   ├── Input/
+│   │   │   ├── Input.tsx
+│   │   │   ├── Input.module.scss
+│   │   │   └── index.ts
+│   │   └── Modal/
+│   ├── layout/                   # Layout components
+│   │   ├── Header/
+│   │   ├── Navigation/
+│   │   └── Container/
+│   ├── shopping/                 # Feature components
+│   │   ├── ShoppingListSelector/
+│   │   ├── AddItemForm/
+│   │   ├── ItemsList/
+│   │   ├── ItemRow/
+│   │   ├── CategoryGroup/
+│   │   └── BulkActions/
+├── contexts/                     # React contexts
+│   ├── ShoppingContext.tsx
+│   └── UIContext.tsx
+├── hooks/                        # Custom hooks
+│   ├── useShoppingList.ts
+│   ├── useLocalStorage.ts
+│   └── useKeyboardShortcuts.ts
+├── types/                        # TypeScript definitions
+│   ├── shopping.ts
+│   ├── ui.ts
+│   └── index.ts
+├── utils/                        # Utility functions
+│   ├── storage.ts
+│   ├── validation.ts
+│   └── categories.ts
+├── styles/                       # Global SCSS
+│   ├── globals.scss
+│   ├── variables.scss
+│   ├── mixins.scss
+│   └── breakpoints.scss
+├── __tests__/                    # Test files
+├── public/                       # Static assets
+└── docs/                         # Documentation
+```
+
+### 1.3 Component Organization Pattern
+Each component follows this structure:
+```
+ComponentName/
+├── ComponentName.tsx             # Component logic
+├── ComponentName.module.scss     # Component styles
+├── ComponentName.test.tsx        # Component tests
+├── ComponentName.stories.tsx     # Storybook stories (optional)
+└── index.ts                      # Export barrel
+```
+
+## 2. Design System & Styling
+
+### 2.1 Color Palette
+```scss
+// styles/variables.scss
+:root {
+  // Base Colors
+  --color-background: #fafafa;        // Off-white background
+  --color-surface: #ffffff;          // Card/surface white
+  --color-text-primary: #1e3a8a;     // Darker blue text
+  --color-text-secondary: #3b82f6;   // Medium blue
+  --color-text-muted: #6b7280;       // Gray text
+  
+  // Action Colors
+  --color-add: #22c55e;              // Green - Add actions
+  --color-edit: #eab308;             // Yellow - Edit actions
+  --color-delete: #ef4444;           // Red - Delete actions
+  
+  // State Colors
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #f87171;
+  --color-info: #3b82f6;
+  
+  // Neutral Colors
+  --color-border: #e5e7eb;
+  --color-border-focus: #3b82f6;
+  --color-disabled: #9ca3af;
+  
+  // Shadows
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+```
+
+### 2.2 Typography Scale
+```scss
+// styles/variables.scss
+:root {
+  // Font Family
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  // Font Sizes (Mobile-first)
+  --font-size-xs: 0.75rem;    // 12px
+  --font-size-sm: 0.875rem;   // 14px
+  --font-size-base: 1rem;     // 16px
+  --font-size-lg: 1.125rem;   // 18px
+  --font-size-xl: 1.25rem;    // 20px
+  --font-size-2xl: 1.5rem;    // 24px
+  --font-size-3xl: 1.875rem;  // 30px
+  
+  // Line Heights
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  
+  // Font Weights
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
+```
+
+### 2.3 Spacing & Layout
+```scss
+// styles/variables.scss
+:root {
+  // Spacing Scale
+  --space-1: 0.25rem;   // 4px
+  --space-2: 0.5rem;    // 8px
+  --space-3: 0.75rem;   // 12px
+  --space-4: 1rem;      // 16px
+  --space-5: 1.25rem;   // 20px
+  --space-6: 1.5rem;    // 24px
+  --space-8: 2rem;      // 32px
+  --space-10: 2.5rem;   // 40px
+  --space-12: 3rem;     // 48px
+  --space-16: 4rem;     // 64px
+  
+  // Container Sizes
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  
+  // Border Radius
+  --border-radius-sm: 0.25rem;
+  --border-radius-md: 0.375rem;
+  --border-radius-lg: 0.5rem;
+  --border-radius-xl: 0.75rem;
+}
+```
+
+### 2.4 Breakpoint System (Mobile-First)
+```scss
+// styles/breakpoints.scss
+$breakpoints: (
+  sm: 640px,   // Small tablets
+  md: 768px,   // Tablets
+  lg: 1024px,  // Small desktops
+  xl: 1280px,  // Large desktops
+);
+
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  }
+}
+
+// Usage:
+// .component {
+//   // Mobile styles (default)
+//   padding: var(--space-4);
+//   
+//   @include respond-to(md) {
+//     // Tablet styles
+//     padding: var(--space-6);
+//   }
+//   
+//   @include respond-to(lg) {
+//     // Desktop styles
+//     padding: var(--space-8);
+//   }
+// }
+```
+
+## 3. Component Implementation Plan
+
+### 3.1 Base UI Components
+
+#### 3.1.1 Button Component
+```typescript
+// components/ui/Button/Button.tsx
+interface ButtonProps {
+  variant: 'add' | 'edit' | 'delete' | 'primary' | 'secondary';
+  size: 'sm' | 'md' | 'lg';
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  loading?: boolean;
+  fullWidth?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+}
+```
+
+```scss
+// components/ui/Button/Button.module.scss
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  min-height: 44px; // Touch target size
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  &:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
+}
+
+.size-sm {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+}
+
+.size-md {
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-base);
+}
+
+.size-lg {
+  padding: var(--space-4) var(--space-6);
+  font-size: var(--font-size-lg);
+}
+
+.variant-add {
+  background-color: var(--color-add);
+  color: white;
+  
+  &:hover:not(:disabled) {
+    background-color: #16a34a;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.variant-edit {
+  background-color: var(--color-edit);
+  color: white;
+  
+  &:hover:not(:disabled) {
+    background-color: #ca8a04;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.variant-delete {
+  background-color: var(--color-delete);
+  color: white;
+  
+  &:hover:not(:disabled) {
+    background-color: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.loading {
+  position: relative;
+  color: transparent;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+```
+
+#### 3.1.2 Input Component
+```typescript
+// components/ui/Input/Input.tsx
+interface InputProps {
+  label?: string;
+  placeholder?: string;
+  value: string;
+  onChange: (value: string) => void;
+  type?: 'text' | 'number' | 'email';
+  error?: string;
+  required?: boolean;
+  disabled?: boolean;
+  fullWidth?: boolean;
+}
+```
+
+```scss
+// components/ui/Input/Input.module.scss
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.input {
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
+  transition: border-color 0.2s ease-in-out;
+  min-height: 44px; // Touch target
+  
+  &:focus {
+    outline: none;
+    border-color: var(--color-border-focus);
+    box-shadow: 0 0 0 1px var(--color-border-focus);
+  }
+  
+  &:disabled {
+    background-color: #f9fafb;
+    color: var(--color-disabled);
+    cursor: not-allowed;
+  }
+  
+  &.error {
+    border-color: var(--color-error);
+  }
+  
+  &.full-width {
+    width: 100%;
+  }
+}
+
+.error-message {
+  font-size: var(--font-size-sm);
+  color: var(--color-error);
+}
+
+.required::after {
+  content: ' *';
+  color: var(--color-error);
+}
+```
+
+### 3.2 Shopping Components
+
+#### 3.2.1 AddItemForm Component
+```typescript
+// components/shopping/AddItemForm/AddItemForm.tsx
+interface AddItemFormProps {
+  onAddItem: (item: Omit<ShoppingItem, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  disabled?: boolean;
+}
+```
+
+```scss
+// components/shopping/AddItemForm/AddItemForm.module.scss
+.form {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--space-6);
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  
+  @include respond-to(md) {
+    flex-direction: row;
+    align-items: end;
+  }
+}
+
+.name-input {
+  flex: 2;
+}
+
+.quantity-input {
+  flex: 1;
+}
+
+.category-select {
+  flex: 1;
+}
+
+.submit-button {
+  @include respond-to(md) {
+    flex-shrink: 0;
+    width: auto;
+  }
+}
+
+.form-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-4);
+  
+  @include respond-to(md) {
+    font-size: var(--font-size-xl);
+  }
+}
+```
+
+#### 3.2.2 ItemRow Component
+```scss
+// components/shopping/ItemRow/ItemRow.module.scss
+.item-row {
+  display: flex;
+  align-items: center;
+  padding: var(--space-3);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  margin-bottom: var(--space-2);
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    box-shadow: var(--shadow-sm);
+    border-color: var(--color-border-focus);
+  }
+  
+  &.completed {
+    opacity: 0.6;
+    
+    .item-name {
+      text-decoration: line-through;
+    }
+  }
+  
+  &.editing {
+    border-color: var(--color-edit);
+    box-shadow: 0 0 0 1px var(--color-edit);
+  }
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  margin-right: var(--space-3);
+  accent-color: var(--color-add);
+}
+
+.item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  
+  @include respond-to(md) {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-4);
+  }
+}
+
+.item-name {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+}
+
+.item-details {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.quantity {
+  font-weight: var(--font-weight-medium);
+}
+
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+.action-button {
+  padding: var(--space-2);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  min-width: 32px;
+  min-height: 32px;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+  
+  &.edit {
+    background-color: var(--color-edit);
+    color: white;
+  }
+  
+  &.delete {
+    background-color: var(--color-delete);
+    color: white;
+  }
+}
+
+// Swipe gesture support
+.swipe-container {
+  position: relative;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.swipe-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  background-color: var(--color-delete);
+  padding: 0 var(--space-4);
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  
+  &.visible {
+    transform: translateX(0);
+  }
+}
+```
+
+### 3.3 Layout Components
+
+#### 3.3.1 Header Component
+```scss
+// components/layout/Header/Header.module.scss
+.header {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-4) 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-content {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0;
+  
+  @include respond-to(md) {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+.list-selector {
+  flex: 1;
+  max-width: 300px;
+  
+  @include respond-to(md) {
+    max-width: 400px;
+  }
+}
+
+.stats {
+  display: none;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  
+  @include respond-to(md) {
+    display: flex;
+  }
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  
+  .label {
+    font-weight: var(--font-weight-medium);
+  }
+  
+  .value {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+  }
+}
+```
+
+## 4. State Management Implementation
+
+### 4.1 TypeScript Definitions
+```typescript
+// types/shopping.ts
+export interface ShoppingItem {
+  id: string;
+  name: string;
+  quantity: string;
+  unit?: string;
+  category: ItemCategory;
+  isCompleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ShoppingList {
+  id: string;
+  name: string;
+  items: ShoppingItem[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface AppState {
+  lists: ShoppingList[];
+  activeListId: string | null;
+  ui: UIState;
+}
+
+export interface UIState {
+  isLoading: boolean;
+  editingItemId: string | null;
+  selectedItems: string[];
+  showDeletedMessage: boolean;
+  lastDeletedItems: ShoppingItem[];
+  isMobile: boolean;
+}
+
+export enum ItemCategory {
+  MEAT = 'meat',
+  DAIRY = 'dairy',
+  FISH_SEAFOOD = 'fish-seafood',
+  FRUITS = 'fruits',
+  VEGETABLES = 'vegetables',
+  GRAINS_BREAD = 'grains-bread',
+  PANTRY = 'pantry',
+  FROZEN = 'frozen',
+  BEVERAGES = 'beverages',
+  SNACKS = 'snacks',
+  HOUSEHOLD = 'household',
+  PERSONAL_CARE = 'personal-care',
+  OTHER = 'other'
+}
+
+export type AppAction =
+  | { type: 'ADD_LIST'; payload: { name: string } }
+  | { type: 'DELETE_LIST'; payload: { id: string } }
+  | { type: 'SET_ACTIVE_LIST'; payload: { id: string } }
+  | { type: 'ADD_ITEM'; payload: { listId: string; item: Omit<ShoppingItem, 'id' | 'createdAt' | 'updatedAt'> } }
+  | { type: 'UPDATE_ITEM'; payload: { listId: string; itemId: string; updates: Partial<ShoppingItem> } }
+  | { type: 'DELETE_ITEM'; payload: { listId: string; itemId: string } }
+  | { type: 'TOGGLE_ITEM_COMPLETE'; payload: { listId: string; itemId: string } }
+  | { type: 'SET_EDITING_ITEM'; payload: { itemId: string | null } }
+  | { type: 'SET_MOBILE'; payload: { isMobile: boolean } };
+```
+
+### 4.2 Shopping Context
+```typescript
+// contexts/ShoppingContext.tsx
+const ShoppingContext = createContext<{
+  state: AppState;
+  dispatch: React.Dispatch<AppAction>;
+  actions: {
+    addList: (name: string) => void;
+    deleteList: (id: string) => void;
+    setActiveList: (id: string) => void;
+    addItem: (listId: string, item: Omit<ShoppingItem, 'id' | 'createdAt' | 'updatedAt'>) => void;
+    updateItem: (listId: string, itemId: string, updates: Partial<ShoppingItem>) => void;
+    deleteItem: (listId: string, itemId: string) => void;
+    toggleItemComplete: (listId: string, itemId: string) => void;
+    bulkDeleteItems: (listId: string, itemIds: string[]) => void;
+    startEditing: (itemId: string) => void;
+    stopEditing: () => void;
+  };
+} | null>(null);
+```
+
+## 5. Mobile-First Implementation Strategy
+
+### 5.1 Touch Interactions
+```scss
+// styles/mixins.scss
+@mixin touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+@mixin swipe-gesture {
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+@mixin mobile-scroll {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+}
+```
+
+### 5.2 Mobile Navigation Pattern
+```scss
+// components/shopping/ItemsList/ItemsList.module.scss
+.items-container {
+  // Mobile: Full screen with padding
+  padding: var(--space-4);
+  
+  @include respond-to(md) {
+    // Tablet: Sidebar or split view
+    padding: var(--space-6);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+  }
+  
+  @include respond-to(lg) {
+    // Desktop: Three column layout
+    grid-template-columns: 300px 1fr 1fr;
+  }
+}
+
+.mobile-actions {
+  position: fixed;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  z-index: 50;
+  
+  @include respond-to(md) {
+    display: none;
+  }
+}
+
+.fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--color-add);
+  color: white;
+  border: none;
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  
+  &:hover {
+    transform: scale(1.1);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+```
+
+### 5.3 Progressive Enhancement
+```typescript
+// hooks/useResponsive.ts
+export const useResponsive = () => {
+  const [breakpoint, setBreakpoint] = useState<'mobile' | 'tablet' | 'desktop'>('mobile');
+  
+  useEffect(() => {
+    const updateBreakpoint = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        setBreakpoint('mobile');
+      } else if (width < 1024) {
+        setBreakpoint('tablet');
+      } else {
+        setBreakpoint('desktop');
+      }
+    };
+    
+    updateBreakpoint();
+    window.addEventListener('resize', updateBreakpoint);
+    return () => window.removeEventListener('resize', updateBreakpoint);
+  }, []);
+  
+  return {
+    isMobile: breakpoint === 'mobile',
+    isTablet: breakpoint === 'tablet',
+    isDesktop: breakpoint === 'desktop',
+    breakpoint
+  };
+};
+```
+
+## 6. Vercel Deployment Configuration
+
+### 6.1 Vercel Configuration
+```json
+// vercel.json
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "functions": {
+    "app/api/**/*.ts": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "redirects": [
+    {
+      "source": "/home",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### 6.2 Environment Variables
+```bash
+# .env.local
+NEXT_PUBLIC_APP_NAME=Shopping List
+NEXT_PUBLIC_VERSION=1.0.0
+NEXT_PUBLIC_ENVIRONMENT=production
+```
+
+### 6.3 Build Optimization
+```typescript
+// next.config.ts
+import type { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
+  experimental: {
+    optimizeCss: true,
+    scrollRestoration: true,
+  },
+  compress: true,
+  poweredByHeader: false,
+  reactStrictMode: true,
+  swcMinify: true,
+  images: {
+    formats: ['image/webp', 'image/avif'],
+    minimumCacheTTL: 60,
+  },
+  sassOptions: {
+    includePaths: ['./styles'],
+    prependData: `
+      @import "variables";
+      @import "mixins";
+      @import "breakpoints";
+    `,
+  },
+};
+
+export default nextConfig;
+```
+
+## 7. Development Workflow
+
+### 7.1 Package.json Scripts
+```json
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:e2e": "playwright test",
+    "format": "prettier --write .",
+    "prepare": "husky install"
+  }
+}
+```
+
+### 7.2 Essential Dependencies
+```json
+{
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.0.0",
+    "husky": "^8.0.0",
+    "jest": "^29.0.0",
+    "jest-environment-jsdom": "^29.0.0",
+    "@testing-library/react": "^13.0.0",
+    "@testing-library/jest-dom": "^6.0.0",
+    "prettier": "^3.0.0",
+    "sass": "^1.69.0",
+    "@playwright/test": "^1.40.0"
+  }
+}
+```
+
+## 8. Implementation Timeline
+
+### 8.1 Phase 1: Foundation (Week 1)
+- [ ] **Day 1-2**: Project setup and configuration
+  - Initialize Next.js project with TypeScript
+  - Configure SCSS and CSS Modules
+  - Set up Vercel deployment
+  - Create basic project structure
+  
+- [ ] **Day 3-4**: Design system implementation
+  - Create SCSS variables and mixins
+  - Build base UI components (Button, Input, Modal)
+  - Implement responsive breakpoint system
+  - Set up Storybook for component development
+  
+- [ ] **Day 5-7**: Core state management
+  - Implement TypeScript interfaces
+  - Create ShoppingContext and reducer
+  - Add local storage utilities
+  - Build custom hooks
+
+### 8.2 Phase 2: Core Features (Week 2)
+- [ ] **Day 8-10**: Shopping list management
+  - Implement list creation/deletion
+  - Build list selector component
+  - Add list switching functionality
+  - Create responsive header layout
+  
+- [ ] **Day 11-14**: Item management
+  - Build AddItemForm component
+  - Implement ItemRow with inline editing
+  - Add category system and filtering
+  - Create bulk action functionality
+
+### 8.3 Phase 3: Mobile Optimization (Week 3)
+- [ ] **Day 15-17**: Mobile-first interactions
+  - Implement swipe gestures
+  - Add touch-friendly interfaces
+  - Create mobile navigation patterns
+  - Optimize for thumb navigation
+  
+- [ ] **Day 18-21**: Progressive enhancement
+  - Add tablet and desktop layouts
+  - Implement keyboard shortcuts
+  - Enhance accessibility features
+  - Performance optimization
+
+### 8.4 Phase 4: Testing & Deployment (Week 4)
+- [ ] **Day 22-24**: Testing implementation
+  - Write unit tests for all components
+  - Add integration tests for user flows
+  - Implement E2E tests with Playwright
+  - Set up CI/CD pipeline
+  
+- [ ] **Day 25-28**: Final polish and deployment
+  - Performance auditing and optimization
+  - Cross-browser testing
+  - Documentation completion
+  - Production deployment to Vercel
+
+## 9. Quality Assurance Checklist
+
+### 9.1 Mobile Performance
+- [ ] Touch targets minimum 44px
+- [ ] Smooth 60fps scrolling
+- [ ] Fast tap response (<100ms)
+- [ ] Optimized for 3G networks
+- [ ] Proper viewport configuration
+
+### 9.2 Accessibility
+- [ ] WCAG 2.1 AA compliance
+- [ ] Keyboard navigation support
+- [ ] Screen reader compatibility
+- [ ] High contrast mode support
+- [ ] Focus management
+
+### 9.3 Cross-Browser Testing
+- [ ] iOS Safari (mobile)
+- [ ] Android Chrome (mobile)
+- [ ] Chrome (desktop)
+- [ ] Firefox (desktop)
+- [ ] Safari (desktop)
+
+### 9.4 Performance Metrics
+- [ ] Lighthouse score >95
+- [ ] First Contentful Paint <1.5s
+- [ ] Largest Contentful Paint <2.5s
+- [ ] Bundle size <200KB
+- [ ] Core Web Vitals passing
+
+This implementation plan provides a comprehensive roadmap for building your shopping list application with Next.js, TypeScript, SCSS modules, and mobile-first design, optimized for Vercel deployment with your specified color scheme and component architecture.

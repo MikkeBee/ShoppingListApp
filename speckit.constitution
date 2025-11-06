@@ -1,0 +1,182 @@
+# SpecKit Constitution: Shopping Application
+
+## Project Overview
+This constitution establishes the fundamental principles, standards, and requirements for the shopping application built with Next.js, TypeScript, and modern web technologies.
+
+## 1. Code Quality Principles
+
+### 1.1 TypeScript Standards
+- **Strict Type Safety**: All code must use TypeScript with strict mode enabled
+- **No `any` types**: Avoid using `any` type; use proper type definitions or `unknown` with type guards
+- **Interface Consistency**: Use interfaces for object shapes and types for unions/primitives
+- **Generic Types**: Leverage generics for reusable components and utilities
+- **Type Exports**: Export all custom types and interfaces for reusability
+
+### 1.2 Code Structure & Organization
+- **Single Responsibility**: Each function/component should have one clear purpose
+- **DRY Principle**: Eliminate code duplication through reusable utilities and components
+- **Component Composition**: Favor composition over inheritance
+- **Separation of Concerns**: Separate business logic, UI logic, and data handling
+- **File Naming**: Use kebab-case for files, PascalCase for components, camelCase for functions
+
+### 1.3 Testing Requirements
+- **Unit Tests**: All utility functions must have unit tests (minimum 80% coverage)
+- **Component Tests**: All React components must have corresponding test files
+- **Integration Tests**: Critical user flows must have integration tests
+- **E2E Tests**: Core shopping functionality must have end-to-end tests
+- **Test Documentation**: Each test should clearly describe what it validates
+
+### 1.4 Documentation Standards
+- **JSDoc Comments**: All public functions and components must have JSDoc documentation
+- **README Updates**: Keep README.md current with setup and deployment instructions
+- **API Documentation**: Document all API endpoints and data structures
+- **Component Props**: Document all component props with TypeScript and JSDoc
+- **Inline Comments**: Use comments for complex business logic and algorithms
+
+## 2. User Experience Consistency
+
+### 2.1 Design System
+- **Component Library**: Maintain a consistent component library with reusable UI elements
+- **Design Tokens**: Use standardized colors, typography, spacing, and shadows
+- **Responsive Design**: All components must work across mobile, tablet, and desktop
+- **Accessibility**: Follow WCAG 2.1 AA guidelines for all user interfaces
+- **Loading States**: Provide clear loading indicators for all async operations
+
+### 2.2 Navigation & Flow
+- **Intuitive Navigation**: Users should always know where they are and how to get back
+- **Breadcrumbs**: Implement breadcrumbs for deep navigation paths
+- **Search Functionality**: Provide robust search with filters and sorting options
+- **Cart Persistence**: Shopping cart should persist across sessions
+- **Error Handling**: Graceful error messages with clear recovery paths
+
+### 2.3 Interactive Elements
+- **Consistent Interactions**: Similar actions should behave the same way throughout the app
+- **Feedback Systems**: Provide immediate feedback for user actions (success, error, loading)
+- **Form Validation**: Real-time validation with clear error messages
+- **Button States**: Clear visual states for buttons (default, hover, active, disabled)
+- **Touch Targets**: Minimum 44px touch targets for mobile interactions
+
+### 2.4 Content Standards
+- **Consistent Tone**: Maintain a consistent voice and tone across all text
+- **Clear Messaging**: Use plain language and avoid technical jargon
+- **Error Messages**: Provide helpful, actionable error messages
+- **Empty States**: Design meaningful empty states with clear next actions
+- **Product Information**: Standardized product display with consistent information hierarchy
+
+## 3. Performance Requirements
+
+### 3.1 Core Web Vitals
+- **Largest Contentful Paint (LCP)**: Must be under 2.5 seconds
+- **First Input Delay (FID)**: Must be under 100 milliseconds
+- **Cumulative Layout Shift (CLS)**: Must be under 0.1
+- **First Contentful Paint (FCP)**: Target under 1.8 seconds
+- **Time to Interactive (TTI)**: Target under 3.8 seconds
+
+### 3.2 Asset Optimization
+- **Image Optimization**: Use Next.js Image component with appropriate formats (WebP, AVIF)
+- **Code Splitting**: Implement route-based and component-based code splitting
+- **Bundle Size**: Keep JavaScript bundles under 250KB gzipped per route
+- **Tree Shaking**: Eliminate unused code through proper imports
+- **Font Loading**: Use font-display: swap and preload critical fonts
+
+### 3.3 Caching Strategy
+- **Static Assets**: Implement long-term caching for static assets (images, fonts, CSS)
+- **API Responses**: Cache API responses appropriately with proper invalidation
+- **CDN Usage**: Utilize CDN for static asset delivery
+- **Browser Caching**: Implement proper cache headers for different asset types
+- **Service Workers**: Consider implementing service workers for offline functionality
+
+### 3.4 Database & API Performance
+- **Query Optimization**: Optimize database queries to minimize response times
+- **Pagination**: Implement pagination for large data sets
+- **Rate Limiting**: Implement rate limiting to prevent abuse
+- **Response Compression**: Use gzip/brotli compression for API responses
+- **Connection Pooling**: Implement database connection pooling
+
+### 3.5 Monitoring & Analytics
+- **Performance Monitoring**: Implement real user monitoring (RUM)
+- **Error Tracking**: Set up comprehensive error tracking and alerting
+- **Core Web Vitals Tracking**: Monitor Core Web Vitals in production
+- **Performance Budgets**: Set and enforce performance budgets in CI/CD
+- **Regular Audits**: Conduct monthly performance audits using Lighthouse
+
+## 4. Security Requirements
+
+### 4.1 Data Protection
+- **Input Validation**: Validate and sanitize all user inputs
+- **SQL Injection Prevention**: Use parameterized queries and ORM protection
+- **XSS Prevention**: Sanitize output and use Content Security Policy
+- **CSRF Protection**: Implement CSRF tokens for state-changing operations
+- **Authentication**: Use secure authentication methods (OAuth, JWT with proper validation)
+
+### 4.2 Privacy & Compliance
+- **Data Minimization**: Only collect necessary user data
+- **GDPR Compliance**: Implement proper consent mechanisms and data deletion
+- **Cookie Policy**: Clear cookie usage disclosure and consent
+- **Third-party Scripts**: Audit and minimize third-party script usage
+- **PII Handling**: Proper handling and protection of personally identifiable information
+
+## 5. Development Workflow
+
+### 5.1 Version Control
+- **Git Flow**: Use feature branches with pull request reviews
+- **Commit Messages**: Follow conventional commit format
+- **Branch Protection**: Require reviews and passing tests before merging
+- **Code Reviews**: All code must be reviewed by at least one other developer
+- **Documentation**: Update documentation with significant changes
+
+### 5.2 CI/CD Pipeline
+- **Automated Testing**: All tests must pass before deployment
+- **Code Quality Gates**: Lint, type check, and test coverage requirements
+- **Performance Testing**: Automated performance regression testing
+- **Security Scanning**: Automated security vulnerability scanning
+- **Deployment Strategy**: Use blue-green or canary deployments for production
+
+### 5.3 Environment Management
+- **Environment Parity**: Keep development, staging, and production environments consistent
+- **Configuration Management**: Use environment variables for configuration
+- **Secret Management**: Secure handling of API keys and sensitive data
+- **Database Migrations**: Automated and reversible database migrations
+- **Dependency Management**: Regular dependency updates and security patches
+
+## 6. Compliance & Quality Gates
+
+### 6.1 Definition of Done
+A feature is considered complete when it:
+- Passes all automated tests (unit, integration, e2e)
+- Meets accessibility requirements (WCAG 2.1 AA)
+- Achieves performance benchmarks (Core Web Vitals)
+- Has proper documentation and type definitions
+- Passes security scan without critical vulnerabilities
+- Is reviewed and approved by at least one team member
+
+### 6.2 Quality Metrics
+- **Test Coverage**: Minimum 80% code coverage
+- **Performance Score**: Lighthouse score of 90+ for performance
+- **Accessibility Score**: Lighthouse score of 100 for accessibility
+- **Best Practices Score**: Lighthouse score of 100 for best practices
+- **Bundle Size**: JavaScript bundle under 250KB gzipped per route
+
+### 6.3 Review Process
+- **Code Review Checklist**: Use standardized checklist for all reviews
+- **Performance Review**: Include performance impact assessment
+- **Security Review**: Assess security implications of changes
+- **UX Review**: Validate user experience consistency
+- **Documentation Review**: Ensure documentation is updated and accurate
+
+## 7. Enforcement & Governance
+
+### 7.1 Automated Enforcement
+- **ESLint Rules**: Enforce code quality through linting rules
+- **TypeScript Strict Mode**: Enforce type safety through compiler settings
+- **Prettier**: Enforce consistent code formatting
+- **Husky Git Hooks**: Pre-commit hooks for linting and testing
+- **CI/CD Checks**: Automated checks in continuous integration pipeline
+
+### 7.2 Regular Reviews
+- **Weekly Code Quality Reviews**: Team review of code quality metrics
+- **Monthly Performance Audits**: Comprehensive performance assessment
+- **Quarterly Architecture Reviews**: Review system architecture and design decisions
+- **Annual Constitution Review**: Update constitution based on learnings and industry changes
+
+This constitution serves as the foundation for maintaining high standards in code quality, user experience, and performance throughout the development lifecycle of the shopping application.
